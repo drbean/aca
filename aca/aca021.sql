@@ -123,7 +123,7 @@ CREATE TABLE try (
     player text NOT NULL,
     league text NOT NULL,
     try integer NOT NULL,
-    quoted text,
+    word text,
     answer text
 );
 
@@ -136,7 +136,8 @@ ALTER TABLE public.try OWNER TO drbean;
 
 CREATE TABLE word (
     exercise text NOT NULL,
-    string text
+    head text,
+    answer text
 );
 
 
@@ -372,7 +373,7 @@ AFN300	N00120056
 -- Data for Name: play; Type: TABLE DATA; Schema: public; Owner: drbean
 --
 
-COPY play (question, answer, player, league, course, try, score, questionchance, answerchance, exercise) FROM stdin;
+COPY play (word, answer, player, league, try, exercise) FROM stdin;
 \.
 
 
@@ -706,7 +707,7 @@ ALTER TABLE ONLY session
 --
 
 ALTER TABLE ONLY try
-    ADD CONSTRAINT try_pkey PRIMARY KEY (player, league, exercise, try);
+    ADD CONSTRAINT try_pkey PRIMARY KEY (player, league, exercise, try, word);
 
 
 --
