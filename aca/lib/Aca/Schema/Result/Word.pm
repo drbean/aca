@@ -48,7 +48,7 @@ __PACKAGE__->table("word");
 =head2 head
 
   data_type: 'text'
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 answer
 
@@ -66,7 +66,7 @@ __PACKAGE__->add_columns(
   "exercise",
   { data_type => "text", is_nullable => 0 },
   "head",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "text", is_nullable => 0 },
   "answer",
   { data_type => "text", is_nullable => 1 },
   "sublist",
@@ -77,17 +77,19 @@ __PACKAGE__->add_columns(
 
 =over 4
 
+=item * L</head>
+
 =item * L</exercise>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("exercise");
+__PACKAGE__->set_primary_key("head", "exercise");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-10-20 15:29:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AdCxKs3HhTRKGKD+4Tzm/Q
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-10-20 15:38:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JDwkFpwgkrQrimcd6ETE1Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
