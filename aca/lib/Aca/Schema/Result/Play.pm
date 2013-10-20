@@ -40,7 +40,7 @@ __PACKAGE__->table("play");
 
 =head1 ACCESSORS
 
-=head2 question
+=head2 word
 
   data_type: 'text'
   is_nullable: 0
@@ -60,11 +60,6 @@ __PACKAGE__->table("play");
 
   data_type: 'text'
   is_foreign_key: 1
-  is_nullable: 0
-
-=head2 course
-
-  data_type: 'text'
   is_nullable: 0
 
 =head2 try
@@ -95,7 +90,7 @@ __PACKAGE__->table("play");
 =cut
 
 __PACKAGE__->add_columns(
-  "question",
+  "word",
   { data_type => "text", is_nullable => 0 },
   "answer",
   { data_type => "text", is_nullable => 1 },
@@ -103,8 +98,6 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_foreign_key => 1, is_nullable => 0 },
   "league",
   { data_type => "text", is_foreign_key => 1, is_nullable => 0 },
-  "course",
-  { data_type => "text", is_nullable => 0 },
   "try",
   { data_type => "integer", is_nullable => 1 },
   "score",
@@ -125,9 +118,7 @@ __PACKAGE__->add_columns(
 
 =item * L</league>
 
-=item * L</course>
-
-=item * L</question>
+=item * L</word>
 
 =item * L</exercise>
 
@@ -135,7 +126,7 @@ __PACKAGE__->add_columns(
 
 =cut
 
-__PACKAGE__->set_primary_key("player", "league", "course", "question", "exercise");
+__PACKAGE__->set_primary_key("player", "league", "word", "exercise");
 
 =head1 RELATIONS
 
@@ -155,8 +146,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-10-20 12:35:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1l5BTIpNNXkjs7Wmk/2uyg
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-10-20 15:29:13
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jMWTjMCfxDelmyHAi/UB0Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
