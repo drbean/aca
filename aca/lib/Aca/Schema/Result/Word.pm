@@ -45,7 +45,12 @@ __PACKAGE__->table("word");
   data_type: 'text'
   is_nullable: 0
 
-=head2 string
+=head2 head
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 answer
 
   data_type: 'text'
   is_nullable: 1
@@ -55,7 +60,9 @@ __PACKAGE__->table("word");
 __PACKAGE__->add_columns(
   "exercise",
   { data_type => "text", is_nullable => 0 },
-  "string",
+  "head",
+  { data_type => "text", is_nullable => 1 },
+  "answer",
   { data_type => "text", is_nullable => 1 },
 );
 
@@ -72,8 +79,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("exercise");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-10-20 12:35:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:g3T4/omMmFMWmjwuzHLa0Q
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-10-20 13:52:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gGCuQyOfLi937Z+Xg7umLw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
