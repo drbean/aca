@@ -60,10 +60,10 @@ __PACKAGE__->table("try");
   data_type: 'integer'
   is_nullable: 0
 
-=head2 quoted
+=head2 word
 
   data_type: 'text'
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 answer
 
@@ -81,8 +81,8 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 0 },
   "try",
   { data_type => "integer", is_nullable => 0 },
-  "quoted",
-  { data_type => "text", is_nullable => 1 },
+  "word",
+  { data_type => "text", is_nullable => 0 },
   "answer",
   { data_type => "text", is_nullable => 1 },
 );
@@ -99,15 +99,17 @@ __PACKAGE__->add_columns(
 
 =item * L</try>
 
+=item * L</word>
+
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("player", "league", "exercise", "try");
+__PACKAGE__->set_primary_key("player", "league", "exercise", "try", "word");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-10-20 12:35:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zERzSq3Fn3ATRZwRoo6mug
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-10-20 13:52:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Yru1WjUEFiRC/I0OhsjvmQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
