@@ -74,11 +74,10 @@ ALTER TABLE public.exercise OWNER TO drbean;
 --
 
 CREATE TABLE play (
-    question text NOT NULL,
+    word text NOT NULL,
     answer text,
     player text NOT NULL,
     league text NOT NULL,
-    course text NOT NULL,
     try integer,
     score integer,
     questionchance integer,
@@ -138,7 +137,8 @@ ALTER TABLE public.try OWNER TO drbean;
 CREATE TABLE word (
     exercise text NOT NULL,
     head text,
-    answer text
+    answer text,
+    sublist text
 );
 
 
@@ -684,7 +684,7 @@ ALTER TABLE ONLY member
 --
 
 ALTER TABLE ONLY play
-    ADD CONSTRAINT play_pkey PRIMARY KEY (player, league, course, question, exercise);
+    ADD CONSTRAINT play_pkey PRIMARY KEY (player, league, word, exercise);
 
 
 --
