@@ -20,6 +20,15 @@ use Catalyst qw/
     -Debug
     ConfigLoader
     Static::Simple
+
+ StackTrace
+
+	Authentication
+	Authorization::Roles
+
+	Session
+	Session::Store::DBIC
+	Session::State::Cookie
 /;
 
 extends 'Catalyst';
@@ -42,6 +51,43 @@ __PACKAGE__->config(
     enable_catalyst_header => 1, # Send X-Catalyst header
 );
 
+__PACKAGE__->config->{'Plugin::Authentication'} = {
+   default => {
+       class           => 'SimpleDB',
+       user_model      => 'dicDB::Player',
+       password_type   => 'clear',
+   },
+};
+
+__PACKAGE__->config->{'Plugin::Session'} = {
+		dbic_class	=> 'DB::Session',
+		expires	=> 3600
+};
+
+__PACKAGE__->config(
+    default_view => 'HTML',
+    'View::HTML' => {
+        #Set the location for TT files
+        INCLUDE_PATH => [
+            __PACKAGE__->path_to( 'root' ),
+        ],
+    },
+    'View::Email' => {
+       stash_key => 'email',
+       default => {
+           content_type => 'text/plain',
+           charset => 'utf-8'
+       },
+       sender => {
+           mailer => 'SMTP',
+           mailer_args => {
+    	   Host     => 'smtp.example.com',
+    	   username => 'username',
+    	   password => 'password',
+       }
+     }
+}
+);
 # Start the application
 __PACKAGE__->setup();
 
