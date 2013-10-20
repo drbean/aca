@@ -66,7 +66,7 @@ sub index :Path :Args(0) {
 				$c->session->{league} = $league;
 				$exercise = $c->forward( 'get_exercise', [ $league ] ) unless $exercise;
 				$c->session->{exercise} = $exercise if $exercise;
-				$c->response->redirect($c->uri_for( "/game"));
+				$c->response->redirect($c->uri_for( "/play"));
 			}
 		} else {
 			$c->stash(error_msg =>
@@ -104,7 +104,7 @@ sub official : Local {
 			$c->model('dicDB::Jigsawrole')->update_or_create(
 				{	league => $league, player => $username,
 					role => $jigsawrole } ) if $jigsawrole;
-			$c->response->redirect($c->uri_for("/game"), 303);
+			$c->response->redirect($c->uri_for("/play"), 303);
 			return;
 		}
 		else {
@@ -135,7 +135,7 @@ sub membership :Local {
 	$c->session->{exercise} = $exercise if $exercise;
 	if ( $exercise ) {
 		$c->response->redirect(
-			$c->uri_for( "/game" ));
+			$c->uri_for( "/play" ));
 	}
 	else {
 		$c->stash(exercise => $exercise);
@@ -153,12 +153,14 @@ DB::Exercise code used by both membership, login actions
 
 sub get_exercise :Private {
 	my ($self, $c, $league) = @_;
-	my $leaguegenre = $c->model("DB::Leaguegenre")->search({league => $league})->next;
-	my $genre = $leaguegenre->get_column('genre');
-	my $exercises = $c->model("DB::Exercise")->search({ genre =>
-			$genre });
-	my $exercise = $exercises->next;
-	if ( $exercise ) { return $exercise->id; }
+	#my $leaguegenre = $c->model("DB::Leaguegenre")->search({league => $league})->next;
+	#my $genre = $leaguegenre->get_column('genre');
+	#my $exercises = $c->model("DB::Exercise")->search({ genre =>
+	#		$genre });
+	#my $exercise = $exercises->next;
+	#if ( $exercise ) { return $exercise->id; }
+	my $exercise = 'base';
+	if ( $exercise ) { return $exercise; }
 	else { return '' }
 }
 
