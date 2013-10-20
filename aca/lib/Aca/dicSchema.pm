@@ -1,4 +1,4 @@
-package Bett::dicSchema;
+package Aca::dicSchema;
 
 use strict;
 use warnings;
