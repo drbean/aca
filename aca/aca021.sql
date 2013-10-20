@@ -59,6 +59,7 @@ ALTER TABLE public.member OWNER TO drbean;
 --
 
 CREATE TABLE exercise (
+    type text NOT NULL,
     genre text NOT NULL,
     id text NOT NULL,
     description text NOT NULL
