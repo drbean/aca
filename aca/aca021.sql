@@ -716,7 +716,7 @@ ALTER TABLE ONLY try
 --
 
 ALTER TABLE ONLY word
-    ADD CONSTRAINT word_pkey PRIMARY KEY (exercise);
+    ADD CONSTRAINT word_pkey PRIMARY KEY (head, exercise);
 
 
 --
