@@ -1,0 +1,45 @@
+[% META title = "Game over" %]
+
+[% coursename = [ "WH", "YN", "Tag", "TF"] %]
+[% IF gameover == 1 %]
+<h1>CONGRATULATIONS</h1>
+Now start learning the words for the Exam in Week 9.
+
+Use the <a href="http://mnemosyne-proj.org">Mnemosyne</a> or <a href="http://ankisrs.net">Anki</a> flash card software.
+[% ELSIF result == "loss" %]
+<h1>GAME OVER</h1>
+[% ELSE %]
+[% END %]
+
+<h2>Record</h2>
+[% n = 0 %]
+[% FOREACH course IN [ WH, YN, Tag, S ] %]
+<h1>Course [% n+1 %]: [% coursename.$n %]-questions</h1>
+
+<table>
+<caption><h3>Questions</caption>
+<tr>
+<th>Attempted: <td>[% course.try %]
+<tr>
+<th>Grammatical: <td>[% course.score + c.config.${coursename.$n}.chances.answer - course.answerchance %]
+<tr>
+<th>With correct answers: <td>[% course.score %]
+<tr>
+<th>Completed: <td>[% course.score %]
+<tr>
+<th>Unfinished: <td>[% c.config.${coursename.$n}.win - course.score %]
+</table>
+
+<table>
+<caption><h3>Unused Chances</caption>
+<tr>
+<th>Questions: <td>[% course.questionchance %]
+<tr>
+<th>Answers: <td>[% course.answerchance %]
+</table>
+
+
+[% n = n+1 %]
+[% END %]
+
+[% INCLUDE questions.tt2 %]
