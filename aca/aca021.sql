@@ -79,9 +79,6 @@ CREATE TABLE play (
     player text NOT NULL,
     league text NOT NULL,
     try integer,
-    score integer,
-    questionchance integer,
-    answerchance integer,
     exercise text NOT NULL
 );
 
@@ -162,6 +159,7 @@ AFN300	NAF031_四技外三甲_必修_2	高階英語聽力	\N
 --
 
 COPY member (league, player) FROM stdin;
+AFN3Y0	193001
 GL00006	U0018027
 GL00006	U0042050
 GL00006	U0017024
