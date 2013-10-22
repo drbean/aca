@@ -111,16 +111,21 @@ sub update :Chained('try') :PathPart('') :CaptureArgs(0) {
 		my $answer = $play->{$head};
 		if ( $answer ) {
 			my $dupe_rs = $tries->search( { answer => $answer },
-				{ select => [ 
-						{ max => 'try' } ] , group_by => ['answer'] } ); 
+			   { select => [ "word", { max => 'try' } ] , group_by => ['word', 'answer'] } );
 			if (  $dupe_rs != 0 ) {
 				my ($dupes, $error_msg);
 				while ( my $dupe = $dupe_rs->next ) {
 					my $dupe_word = $dupe->word;
+					next if $dupe_word eq $head;
 					my $superseding_try = $tries->search({
 						word => $dupe_word })->get_column('try')->max;
-					next if $dupe_word eq $head;
-					next if $dupe->try < $superseding_try;
+					my $answer_try = $tries->search({
+						word => $dupe_word, answer => $answer})->get_column('try')->max;
+					if ( $dupe->try <= $superseding_try ) {
+						$standing->find_or_create({ word => $head, answer => $answer,
+						try => $c->stash->{try} });
+						next;
+					}
 					$error_msg .= "<br> You gave '$head' and '$dupe_word' the same \
 translation, '$answer'. Choose a different translation for one of them. </br> ";
 					$dupes->{ $dupe_word } = $answer;
