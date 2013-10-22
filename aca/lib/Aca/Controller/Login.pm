@@ -104,7 +104,7 @@ sub official : Local {
 			$c->model('dicDB::Jigsawrole')->update_or_create(
 				{	league => $league, player => $username,
 					role => $jigsawrole } ) if $jigsawrole;
-			$c->response->redirect($c->uri_for("/play"), 303);
+			$c->response->redirect($c->uri_for("/play", "setup"), 303);
 			return;
 		}
 		else {
