@@ -67,21 +67,6 @@ __PACKAGE__->table("play");
   data_type: 'integer'
   is_nullable: 1
 
-=head2 score
-
-  data_type: 'integer'
-  is_nullable: 1
-
-=head2 questionchance
-
-  data_type: 'integer'
-  is_nullable: 1
-
-=head2 answerchance
-
-  data_type: 'integer'
-  is_nullable: 1
-
 =head2 exercise
 
   data_type: 'text'
@@ -99,12 +84,6 @@ __PACKAGE__->add_columns(
   "league",
   { data_type => "text", is_foreign_key => 1, is_nullable => 0 },
   "try",
-  { data_type => "integer", is_nullable => 1 },
-  "score",
-  { data_type => "integer", is_nullable => 1 },
-  "questionchance",
-  { data_type => "integer", is_nullable => 1 },
-  "answerchance",
   { data_type => "integer", is_nullable => 1 },
   "exercise",
   { data_type => "text", is_nullable => 0 },
@@ -146,8 +125,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-10-20 15:29:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jMWTjMCfxDelmyHAi/UB0Q
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-10-20 22:14:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ouv/EwhTkKE9AXmXyRl8Bg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
