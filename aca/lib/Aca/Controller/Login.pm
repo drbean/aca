@@ -39,9 +39,9 @@ sub index : Path : Args(0) {
 			if ( $c->check_user_roles($officialrole) ) {
 				$c->stash->{id}   = $id;
 				$c->stash->{name} = $name;
-				my @leagues = $c->model('DB::League')->search({});
+				my @leagues = $c->model('dicDB::League')->search({});
 				$c->stash->{leagues} = \@leagues;
-				my $jigsawroles = $c->model('DB::Jigsawrole');
+				my $jigsawroles = $c->model('dicDB::Jigsawrole');
 				my $oldrole = $jigsawroles->search( { player => $id } )->next;
 				if ($oldrole) {
 					$c->stash->{oldrole} = $oldrole->role;
@@ -52,7 +52,7 @@ sub index : Path : Args(0) {
 				return;
 			}
 			my @memberships =
-			  $c->model("DB::Member")->search( { player => $id } );
+			  $c->model("dicDB::Member")->search( { player => $id } );
 			my @leagues;
 			my $exercise = $c->session->{exercise} || $c->request->query_params
 					->{exercise};
@@ -109,7 +109,7 @@ sub official : Local {
 		my $officialrole = 1;
 		if ( $c->check_user_roles($officialrole) ) {
 			$c->session->{league} = $league;
-			$c->model('DB::Jigsawrole')->update_or_create(
+			$c->model('dicDB::Jigsawrole')->update_or_create(
 				{ league => $league, player => $username, role => $jigsawrole } )
 					if defined $jigsawrole;
 			$c->response->redirect($c->uri_for("/exercises/list"), 303);
