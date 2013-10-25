@@ -34,7 +34,6 @@ sub index : Path : Args(0) {
 		my $username = $id;
 		if ( $c->authenticate( { id => $username, password => $password } ) ) {
 			$c->session->{player_id} = $id;
-			$c->session->{question}  = undef;
 			my $officialrole = 1;
 			if ( $c->check_user_roles($officialrole) ) {
 				$c->stash->{id}   = $id;
@@ -56,6 +55,7 @@ sub index : Path : Args(0) {
 			my @leagues;
 			my $exercise = $c->session->{exercise} || $c->request->query_params
 					->{exercise};
+$DB::single=1;
 			my $genre = $c->model("DB::Exercise")->search( {id => $exercise })
 				->first->genre;
 			$c->session->{genre} = $genre;
