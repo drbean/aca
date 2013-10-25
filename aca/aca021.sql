@@ -140,6 +140,21 @@ CREATE TABLE word (
 
 
 --
+-- Data for Name: leaguegenre; Type: TABLE DATA; Schema: public; Owner: drbean
+--
+
+COPY leaguegenre (league, genre) FROM stdin;
+AFN2N0  business
+AFN3Y0  multimedia
+GL00006 conversation
+GL00030 conversation
+FLA0006 media
+AFN300  conversation
+FLA0007 speaking
+\.
+
+
+--
 -- Data for Name: league; Type: TABLE DATA; Schema: public; Owner: drbean
 --
 
@@ -660,6 +675,25 @@ session:c577e6e90b3d40f77ef0da88f727f9d58b69c0d9                        	BQgDAAA
 ALTER TABLE ONLY exercise
     ADD CONSTRAINT exercise_pkey PRIMARY KEY (genre, id);
 
+--
+-- Name: leaguegenre; Type: TABLE; Schema: public; Owner: drbean; Tablespace:
+--
+
+CREATE TABLE leaguegenre (
+    league character varying(25) NOT NULL,
+    genre character varying(25) NOT NULL
+);
+
+
+ALTER TABLE public.leaguegenre OWNER TO drbean;
+
+
+-- Name: leaguegenre_pkey; Type: CONSTRAINT; Schema: public; Owner: drbean; Tablespace:
+--
+
+ALTER TABLE ONLY leaguegenre
+    ADD CONSTRAINT leaguegenre_pkey PRIMARY KEY (league, genre);
+
 
 --
 -- Name: league_pkey; Type: CONSTRAINT; Schema: public; Owner: drbean; Tablespace: 
@@ -717,6 +751,12 @@ ALTER TABLE ONLY word
     ADD CONSTRAINT word_pkey PRIMARY KEY (head, exercise);
 
 
+-- Name: leaguegenre_idx_league; Type: INDEX; Schema: public; Owner: drbean; Tablespace:
+--
+
+CREATE INDEX leaguegenre_idx_league ON leaguegenre USING btree (league);
+
+
 --
 -- Name: member_idx_league; Type: INDEX; Schema: public; Owner: drbean; Tablespace: 
 --
@@ -761,6 +801,11 @@ ALTER TABLE ONLY member
 ALTER TABLE ONLY play
     ADD CONSTRAINT play_fk_league_player FOREIGN KEY (league, player) REFERENCES member(league, player) ON UPDATE CASCADE ON DELETE CASCADE;
 
+
+-- Name: leaguegenre_idx_league; Type: INDEX; Schema: public; Owner: drbean; Tablespace:
+--
+
+CREATE INDEX leaguegenre_idx_league ON leaguegenre USING btree (league);
 
 --
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
@@ -810,6 +855,15 @@ REVOKE ALL ON TABLE word FROM PUBLIC;
 REVOKE ALL ON TABLE word FROM drbean;
 GRANT ALL ON TABLE word TO drbean;
 GRANT SELECT ON TABLE word TO apache;
+
+--
+-- Name: leaguegenre; Type: ACL; Schema: public; Owner: drbean
+--
+
+REVOKE ALL ON TABLE leaguegenre FROM PUBLIC;
+REVOKE ALL ON TABLE leaguegenre FROM drbean;
+GRANT ALL ON TABLE leaguegenre TO drbean;
+GRANT SELECT ON TABLE leaguegenre TO apache;
 
 
 --
