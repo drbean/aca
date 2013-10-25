@@ -67,6 +67,8 @@ sub index : Path : Args(0) {
 				$c->stash->{id}	   = $id;
 				$c->stash->{name}	 = $name;
 				$c->stash->{leagues}  = \@leagues;
+				$c->session->{exercise} = $exercise if $exercise;
+				$c->stash(exercise => $exercise);
 				$c->stash->{template} = 'membership.tt2';
 				return;
 			}
@@ -77,7 +79,11 @@ sub index : Path : Args(0) {
 					$c->uri_for("/play/$exercise"), 303 );
 			}
 			else {
-				$c->response->redirect( $c->uri_for("/exercises/list"), 303 );
+				my $league = $leagues[0]->id;
+				$c->session->{league} = $league;
+				$exercise = $c->forward( 'get_exercise', [ $league ] ) unless $exercise;
+				$c->session->{exercise} = $exercise if $exercise;
+				$c->response->redirect($c->uri_for( "/play/setup"));
 			}
 			return;
 		}
@@ -103,16 +109,18 @@ sub official : Local {
 	my $league = $c->request->params->{league} || "";
 	my $jigsawrole = $c->request->params->{jigsawrole} || "";
 	my $password = lc $c->request->params->{password} || "";
+	my $exercise = $c->request->params->{exercise} || "";
 	my $username = $c->session->{player_id};
 	if ( $c->authenticate( {id =>$username, password=>$password} ) ) {
 		# my $officialrole = "official";
 		my $officialrole = 1;
 		if ( $c->check_user_roles($officialrole) ) {
+			$c->session->{exercise} = $exercise if $exercise;
 			$c->session->{league} = $league;
 			$c->model('dicDB::Jigsawrole')->update_or_create(
 				{ league => $league, player => $username, role => $jigsawrole } )
 					if defined $jigsawrole;
-			$c->response->redirect($c->uri_for("/exercises/list"), 303);
+			$c->response->redirect($c->uri_for("/play/setup"), 303);
 			return;
 		}
 		else {
@@ -138,16 +146,16 @@ sub membership : Local {
 	my ($self, $c) = @_;
 	my $league = $c->request->params->{league} || "";
 	my $password = $c->request->params->{password} || "";
+	my $exercise = $c->request->params->{exercise} || "";
 	$c->session->{league} = $league;
-	if ( defined $c->session->{exercise}) {
-		my $exercise = $c->session->{exercise};
+	$c->session->{exercise} = $exercise if $exercise;
+	if ( $exercise ) {
 		$c->response->redirect(
-			$c->uri_for( "/play/$exercise" ), 303 );
+			$c->uri_for( "/play/setup" ));
 	}
 	else {
 		$c->response->redirect( $c->uri_for("/exercises/list"), 303 );
 	}
-	return;
 	return;
 }
 
