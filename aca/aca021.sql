@@ -28,6 +28,20 @@ SET default_tablespace = '';
 
 SET default_with_oids = false;
 
+
+--
+-- Name: leaguegenre; Type: TABLE; Schema: public; Owner: drbean; Tablespace:
+--
+
+CREATE TABLE leaguegenre (
+    league character varying(25) NOT NULL,
+    genre character varying(25) NOT NULL
+);
+
+
+ALTER TABLE public.leaguegenre OWNER TO drbean;
+
+
 --
 -- Name: league; Type: TABLE; Schema: public; Owner: drbean; Tablespace: 
 --
@@ -675,18 +689,6 @@ session:c577e6e90b3d40f77ef0da88f727f9d58b69c0d9                        	BQgDAAA
 ALTER TABLE ONLY exercise
     ADD CONSTRAINT exercise_pkey PRIMARY KEY (genre, id);
 
---
--- Name: leaguegenre; Type: TABLE; Schema: public; Owner: drbean; Tablespace:
---
-
-CREATE TABLE leaguegenre (
-    league character varying(25) NOT NULL,
-    genre character varying(25) NOT NULL
-);
-
-
-ALTER TABLE public.leaguegenre OWNER TO drbean;
-
 
 -- Name: leaguegenre_pkey; Type: CONSTRAINT; Schema: public; Owner: drbean; Tablespace:
 --
@@ -802,11 +804,6 @@ ALTER TABLE ONLY play
     ADD CONSTRAINT play_fk_league_player FOREIGN KEY (league, player) REFERENCES member(league, player) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Name: leaguegenre_idx_league; Type: INDEX; Schema: public; Owner: drbean; Tablespace:
---
-
-CREATE INDEX leaguegenre_idx_league ON leaguegenre USING btree (league);
-
 --
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
@@ -855,6 +852,16 @@ REVOKE ALL ON TABLE word FROM PUBLIC;
 REVOKE ALL ON TABLE word FROM drbean;
 GRANT ALL ON TABLE word TO drbean;
 GRANT SELECT ON TABLE word TO apache;
+
+--
+-- Name: play; Type: ACL; Schema: public; Owner: drbean
+--
+
+REVOKE ALL ON TABLE play FROM PUBLIC;
+REVOKE ALL ON TABLE play FROM drbean;
+GRANT ALL ON TABLE play TO drbean;
+GRANT SELECT,INSERT,DELETE ON TABLE play TO apache;
+
 
 --
 -- Name: leaguegenre; Type: ACL; Schema: public; Owner: drbean
