@@ -72,12 +72,12 @@ sub try :Chained('setup') :PathPart('') :CaptureArgs(0) {
 	my $ex = $c->stash->{exercise};
 	if ( $c->request->params ) {
 		my $course = $c->stash->{course};
-		my $play = $c->request->params;
-		delete $play->{course};
-		delete $play->{shift};
-		delete $play->{Submit};
-		$c->stash({ play => $play });
-		my @heads = keys %$play;
+		my $in_play = $c->request->params;
+		delete $in_play->{course};
+		delete $in_play->{shift};
+		delete $in_play->{Submit};
+		$c->stash({ in_play => $in_play });
+		my @heads = keys %$in_play;
 		my $tries = $c->model('DB::Try')->search({
 			league => $c->stash->{league},
 			exercise => $c->stash->{exercise},
@@ -85,7 +85,7 @@ sub try :Chained('setup') :PathPart('') :CaptureArgs(0) {
 			});
 		my $last_try = $tries->get_column('try')->max() + 1;
 		for my $word ( @heads ) {
-			my $answer = $play->{$word};
+			my $answer = $in_play->{$word};
 			$tries->create({
 					try => $last_try,
 					word => $word,
@@ -98,6 +98,8 @@ sub try :Chained('setup') :PathPart('') :CaptureArgs(0) {
 
 =head2 update
 
+TODO jjjjj
+
 =cut
 
 sub update :Chained('try') :PathPart('') :CaptureArgs(0) {
@@ -108,12 +110,12 @@ sub update :Chained('try') :PathPart('') :CaptureArgs(0) {
 	my $standing = $c->stash->{standing};
 	my $tries = $c->stash->{tries};
 	my $last_try = $c->stash->{last_try};
-	my $play = $c->stash->{play};
+	my $in_play = $c->stash->{in_play};
 	my $words = $c->stash->{word};
 	$words->reset;
 	my (%dupes, %values, %value_dupes, $error_msg);
-	for ( keys %$play ) {
-		my $value = $play->{$_};
+	for ( keys %$in_play ) {
+		my $value = $in_play->{$_};
 		$values{$value}++ if $value;
 	}
 	my @values = values %values;
@@ -121,8 +123,8 @@ sub update :Chained('try') :PathPart('') :CaptureArgs(0) {
 		my @overvalued = grep { $values{$_} > 1 } keys %values;
 		for my $value ( @overvalued ) {
 			my $value_dupe = $value_dupes{$value};
-			for my $key ( keys %$play ) {
-				if ( $play->{$key} eq $value ) {
+			for my $key ( keys %$in_play ) {
+				if ( $in_play->{$key} eq $value ) {
 					$dupes{$key} = $value;
 					push @$value_dupe, $key;
 				}
@@ -139,8 +141,8 @@ translation, '$value'. Choose a different translation for one of them. </br> ";
 			$error_msg .= "<br/>";
 		}
 	}
-	for my $word ( %$play ) {
-		my $answer = $play->{$word};
+	for my $word ( %$in_play ) {
+		my $answer = $in_play->{$word};
 		my $existing_words = $standing->search({ answer => $answer });
 		if ( $dupes{$word} ) {
 			while ( my $standing = $existing_words->next ) {
@@ -148,8 +150,8 @@ translation, '$value'. Choose a different translation for one of them. </br> ";
 			}
 			$existing_words->delete unless $existing_words == 0;
 		}
-		elsif ( $play->{$word} ) {
-			$standing->create({ word => $word, answer => $play->{$word},
+		elsif ( $in_play->{$word} ) {
+			$standing->create({ word => $word, answer => $in_play->{$word},
 			try => $c->stash->{try} });
 		}
 	}
