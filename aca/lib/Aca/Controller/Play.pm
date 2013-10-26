@@ -98,7 +98,7 @@ sub try :Chained('setup') :PathPart('') :CaptureArgs(0) {
 
 =head2 update
 
-TODO jjjjj
+TODO standings not checked for dupes in in_play
 
 =cut
 
@@ -143,15 +143,18 @@ translation, '$value'. Choose a different translation for one of them. </br> ";
 	}
 	for my $word ( %$in_play ) {
 		my $answer = $in_play->{$word};
+		next unless $answer;
 		my $existing_words = $standing->search({ answer => $answer });
-		if ( $dupes{$word} ) {
-			while ( my $standing = $existing_words->next ) {
-				$dupes{ $standing->word } = $answer;
-			}
+		while ( my $standing = $existing_words->next ) {
+			my $word_in_standing = $standing->word;
+			$dupes{ $word_in_standing } = $answer;
+			push @{ $value_dupes{$answer} }, $word_in_standing;
+		}
+		if ( $value_dupes{$answer} ) {
 			$existing_words->delete unless $existing_words == 0;
 		}
-		elsif ( $in_play->{$word} ) {
-			$standing->create({ word => $word, answer => $in_play->{$word},
+		else {
+			$standing->create({ word => $word, answer => $answer,
 			try => $c->stash->{try} });
 		}
 	}
