@@ -147,7 +147,9 @@ translation, '$value'. Choose a different translation for one of them. </br> ";
 		my $existing_words = $standing->search({ answer => $answer });
 		while ( my $standing = $existing_words->next ) {
 			my $word_in_standing = $standing->word;
+			$dupes{ $word } = $answer;
 			$dupes{ $word_in_standing } = $answer;
+			push @{ $value_dupes{$answer} }, $word;
 			push @{ $value_dupes{$answer} }, $word_in_standing;
 			$error_msg .= "<br> Previously, you gave '$word_in_standing' the same \
 translation as '$word', namely, '$answer'. Choose a different translation for one \
