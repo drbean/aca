@@ -149,6 +149,9 @@ translation, '$value'. Choose a different translation for one of them. </br> ";
 			my $word_in_standing = $standing->word;
 			$dupes{ $word_in_standing } = $answer;
 			push @{ $value_dupes{$answer} }, $word_in_standing;
+			$error_msg .= "<br> Previously, you gave '$word_in_standing' the same \
+translation as '$word', namely, '$answer'. Choose a different translation for one \
+of them. </br> ";
 		}
 		if ( $value_dupes{$answer} ) {
 			$existing_words->delete unless $existing_words == 0;
