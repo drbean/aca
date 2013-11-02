@@ -1,0 +1,152 @@
+1. Finish the 179 words from the exercise linked at http://web.nuu.edu.tw/~greg/AFN3Y0.html
+before Sunday lunchtime.
+
+	At the moment,
+	Sat Nov  2 11:50:17 CST 2013
+	the standings are as below.
+
+Your score in the exam will be the increase in the number of answers which are 
+right between your answers now and your answers then.
+
+If you've only done 12 answers, your maximum score is 12.
+
+If you've done 179 answers, your maximum possible score is 179.
+
+2. Install anki http://ankisrs.net, or mnemosyne http://mnemosyne-proj.org
+and download the files:
+
+	Dr Bean has uploaded decks of cards to the 2 projects' web pages.
+	</br>
+
+	At <href="http://mnemosyne-proj.org">Mnemosyne</a>:
+	</br>
+
+	<ul>
+	<li><a href="http://mnemosyne-proj.org/node/317">Sublist 1 for Mnemosyne</a>
+	<li><a href="http://mnemosyne-proj.org/node/318">Sublist 2 for Mnemosyne</a>
+	<li><a href="http://mnemosyne-proj.org/node/319">Sublist 3 for Mnemosyne</a>
+	</ul>
+
+	Or at <href="http://ankiweb.net">Anki</a>:
+	</br>
+
+	<ul>
+	<li><a href="https://ankiweb.net/shared/info/1029485837">Sublist 1 for Anki</a>
+	<li><a href="https://ankiweb.net/shared/info/3450331509">Sublist 2 for Anki</a>
+	<li><a href="https://ankiweb.net/shared/info/3916546620">Sublist 3 for Anki</a>
+	</ul>
+
+	Or download the cards from Dr Bean's site as text files and import them yourselves.
+
+	<ul>
+	<li><a href="http://web.nuu.edu.tw/~greg/multimedia/awl_freq_1.txt">Sublist 1 as text file</a>
+	<li><a href="http://web.nuu.edu.tw/~greg/multimedia/awl_freq_1.txt">Sublist 2 as text file</a>
+	<li><a href="http://web.nuu.edu.tw/~greg/multimedia/awl_freq_1.txt">Sublist 3 as text file</a>
+	</ul>
+
+3. The correct answers are as given by Google Translate and there are problems in its 
+answers.
+
+	For example, for 'minor,' it gives: minor: 未成年人
+	That is only one meaning, and probably not the most important one.
+
+	In any case, this will be regarded as the right answer in the exam. All others 
+	will be regarded as incorrect. Sorry.
+
+Standings:
+
+---
+exercise: base
+points:
+  N00200001:
+    tries: 15
+    answers: 179
+    correct: ~
+  N00200008:
+    tries: 7
+    answers: 0
+    correct: ~
+  N00200009:
+    tries: 9
+    answers: 12
+    correct: ~
+  N00200017:
+    tries: 25
+    answers: 179
+    correct: ~
+  N00200025:
+    tries: 8
+    answers: 63
+    correct: ~
+  N00200029:
+    tries: 8
+    answers: 0
+    correct: ~
+  N00200030:
+    tries: 10
+    answers: 179
+    correct: ~
+  N00200031:
+    tries: 3
+    answers: 0
+    correct: ~
+  N00200034:
+    tries: ~
+    answers: 0
+    correct: ~
+  N00200036:
+    tries: ~
+    answers: 0
+    correct: ~
+  N00200037:
+    tries: 7
+    answers: 179
+    correct: ~
+  N00200042:
+    tries: 17
+    answers: 179
+    correct: ~
+  N00200043:
+    tries: 3
+    answers: 0
+    correct: ~
+  N00200051:
+    tries: ~
+    answers: 0
+    correct: ~
+  N00200054:
+    tries: 22
+    answers: 179
+    correct: ~
+  N00200055:
+    tries: 12
+    answers: 93
+    correct: ~
+  N00200056:
+    tries: 6
+    answers: 177
+    correct: ~
+  N00203002:
+    tries: ~
+    answers: 0
+    correct: ~
+  N01202001:
+    tries: 8
+    answers: 179
+    correct: ~
+  N01202004:
+    tries: 4
+    answers: 73
+    correct: ~
+  N01203003:
+    tries: 1
+    answers: 24
+    correct: ~
+  N02202113:
+    tries: 13
+    answers: 0
+    correct: ~
+  N96200030:
+    tries: 17
+    answers: 179
+    correct: ~
