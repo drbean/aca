@@ -47,7 +47,7 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 		->search({ player => $player,
 		exercise => $exercise,
 		league => $league });
-	if ( $standing->count == 180 ) {
+	if ( $standing->count == 179 ) {
 		$c->stash(gameover => 1);
 		$c->detach('exchange');
 	}
