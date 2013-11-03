@@ -1,152 +1,158 @@
-1. Finish the 179 words from the exercise linked at http://web.nuu.edu.tw/~greg/AFN3Y0.html
-before Sunday lunchtime.
+1. Now the pre-test site has been closed.
 
-	At the moment,
-	Sat Nov  2 11:50:17 CST 2013
-	the standings are as below.
+The number of words submitted and the number of answers correct is 
+as below.
 
-Your score in the exam will be the increase in the number of answers which are 
-right between your answers now and your answers then.
+Your score in the exam will be the increase in the number of 
+answers which you get correct, but only for those words which you 
+submitted in the pre-test.
 
-If you've only done 12 answers, your maximum score is 12.
+This score will be expressed as a percentage of the increase in 
+number of correct answers of the top scorer.
 
-If you've done 179 answers, your maximum possible score is 179.
+This top increase could be as high as 161, if 1 player gets all the 
+words correct he/she didn't in the pretest.
 
-2. Install anki http://ankisrs.net, or mnemosyne http://mnemosyne-proj.org
-and download the files:
+I expect the top scorer's score to be lower than that, however.
 
-	Dr Bean has uploaded decks of cards to the 2 projects' web pages.
-	</br>
+2. Now Install anki http://ankisrs.net, or mnemosyne 
+http://mnemosyne-proj.org and download the files, and start 
+practicing:
 
-	At <href="http://mnemosyne-proj.org">Mnemosyne</a>:
-	</br>
+Dr Bean has uploaded decks of cards to the 2 projects' web pages.
+</br>
 
-	<ul>
-	<li><a href="http://mnemosyne-proj.org/node/317">Sublist 1 for Mnemosyne</a>
-	<li><a href="http://mnemosyne-proj.org/node/318">Sublist 2 for Mnemosyne</a>
-	<li><a href="http://mnemosyne-proj.org/node/319">Sublist 3 for Mnemosyne</a>
-	</ul>
+At <href="http://mnemosyne-proj.org">Mnemosyne</a>:
+</br>
 
-	Or at <href="http://ankiweb.net">Anki</a>:
-	</br>
+<ul>
+<li><a href="http://mnemosyne-proj.org/node/317">Sublist 1 for Mnemosyne</a>
+<li><a href="http://mnemosyne-proj.org/node/318">Sublist 2 for Mnemosyne</a>
+<li><a href="http://mnemosyne-proj.org/node/319">Sublist 3 for Mnemosyne</a>
+</ul>
 
-	<ul>
-	<li><a href="https://ankiweb.net/shared/info/1029485837">Sublist 1 for Anki</a>
-	<li><a href="https://ankiweb.net/shared/info/3450331509">Sublist 2 for Anki</a>
-	<li><a href="https://ankiweb.net/shared/info/3916546620">Sublist 3 for Anki</a>
-	</ul>
+Or at <href="http://ankiweb.net">Anki</a>:
+</br>
 
-	Or download the cards from Dr Bean's site as text files and import them yourselves.
+<ul>
+<li><a href="https://ankiweb.net/shared/info/1029485837">Sublist 1 for Anki</a>
+<li><a href="https://ankiweb.net/shared/info/3450331509">Sublist 2 for Anki</a>
+<li><a href="https://ankiweb.net/shared/info/3916546620">Sublist 3 for Anki</a>
+</ul>
 
-	<ul>
-	<li><a href="http://web.nuu.edu.tw/~greg/multimedia/awl_freq_1.txt">Sublist 1 as text file</a>
-	<li><a href="http://web.nuu.edu.tw/~greg/multimedia/awl_freq_1.txt">Sublist 2 as text file</a>
-	<li><a href="http://web.nuu.edu.tw/~greg/multimedia/awl_freq_1.txt">Sublist 3 as text file</a>
-	</ul>
+Or download the cards from Dr Bean's site as text files and import them yourselves.
+
+<ul>
+<li><a href="http://web.nuu.edu.tw/~greg/multimedia/awl_freq_1.txt">Sublist 1 as text file</a>
+<li><a href="http://web.nuu.edu.tw/~greg/multimedia/awl_freq_2.txt">Sublist 2 as text file</a>
+<li><a href="http://web.nuu.edu.tw/~greg/multimedia/awl_freq_3.txt">Sublist 3 as text file</a>
+</ul>
 
 3. The correct answers are as given by Google Translate and there are problems in its 
 answers.
 
-	For example, for 'minor,' it gives: minor: 未成年人
-	That is only one meaning, and probably not the most important one.
+Check the cards to see what the translations are. This translation will be 
+regarded as the right answer in the exam.
 
-	In any case, this will be regarded as the right answer in the exam. All others 
-	will be regarded as incorrect. Sorry.
-
-Standings:
+Pretest:
 
 ---
 exercise: base
 points:
   N00200001:
-    tries: 15
     answers: 179
-    correct: ~
+    correct: 51
+    exam_maximum_score: '( 179 - 51 )/ 161'
   N00200008:
-    tries: 7
-    answers: 0
-    correct: ~
+    answers: 179
+    correct: 61
+    exam_maximum_score: '( 179 - 61 )/ 161'
   N00200009:
-    tries: 9
     answers: 12
-    correct: ~
+    correct: 3
+    exam_maximum_score: '( 12 - 3 )/ 161'
   N00200017:
-    tries: 25
     answers: 179
-    correct: ~
+    correct: 18
+    exam_maximum_score: '( 179 - 18 )/ 161'
   N00200025:
-    tries: 8
-    answers: 63
-    correct: ~
+    answers: 179
+    correct: 83
+    exam_maximum_score: '( 179 - 83 )/ 161'
   N00200029:
-    tries: 8
+    tries: 0
     answers: 0
-    correct: ~
+    correct: 0
+    exam_maximum_score: '( 0 - 0 )/ 161'
   N00200030:
-    tries: 10
     answers: 179
-    correct: ~
+    correct: 41
+    exam_maximum_score: '( 179 - 41 )/ 161'
   N00200031:
-    tries: 3
-    answers: 0
-    correct: ~
+    answers: 77
+    correct: 22
+    exam_maximum_score: '( 77 - 22 )/ 161'
   N00200034:
-    tries: ~
+    tries: 0
     answers: 0
-    correct: ~
+    correct: 0
+    exam_maximum_score: '( 0 - 0 )/ 161'
   N00200036:
-    tries: ~
+    tries: 0
     answers: 0
-    correct: ~
+    correct: 0
+    exam_maximum_score: '( 0 - 0 )/ 161'
   N00200037:
-    tries: 7
     answers: 179
-    correct: ~
+    correct: 137
+    exam_maximum_score: '( 179 - 137 )/ 161'
   N00200042:
-    tries: 17
     answers: 179
-    correct: ~
+    correct: 148
+    exam_maximum_score: '( 179 - 148 )/ 161'
   N00200043:
-    tries: 3
-    answers: 0
-    correct: ~
+    answers: 179
+    correct: 55
+    exam_maximum_score: '( 179 - 55 )/ 161'
   N00200051:
-    tries: ~
+    tries: 0
     answers: 0
-    correct: ~
+    correct: 0
+    exam_maximum_score: '( 0 - 0 )/ 161'
   N00200054:
-    tries: 22
     answers: 179
-    correct: ~
+    correct: 146
+    exam_maximum_score: '( 179 - 146 )/ 161'
   N00200055:
-    tries: 12
     answers: 93
-    correct: ~
+    correct: 26
+    exam_maximum_score: '( 93 - 26 )/ 161'
   N00200056:
-    tries: 6
     answers: 177
-    correct: ~
+    correct: 70
+    exam_maximum_score: '( 177 - 70 )/ 161'
   N00203002:
-    tries: ~
+    tries: 0
     answers: 0
-    correct: ~
+    correct: 0
+    exam_maximum_score: '( 0 - 0 )/ 161'
   N01202001:
-    tries: 8
     answers: 179
-    correct: ~
+    correct: 18
+    exam_maximum_score: '( 179 - 18 )/ 161'
   N01202004:
-    tries: 4
     answers: 73
-    correct: ~
+    correct: 24
+    exam_maximum_score: '( 73 - 24 )/ 161'
   N01203003:
-    tries: 1
-    answers: 24
-    correct: ~
+    answers: 168
+    correct: 53
+    exam_maximum_score: '( 168 - 53 )/ 161'
   N02202113:
-    tries: 13
-    answers: 0
-    correct: ~
+    answers: 96
+    correct: 37
+    exam_maximum_score: '( 96 - 37 )/ 161'
   N96200030:
-    tries: 17
     answers: 179
-    correct: ~
+    correct: 54
+    exam_maximum_score: '( 179 - 54 )/ 161'
