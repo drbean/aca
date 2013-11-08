@@ -8,8 +8,8 @@ use Pod::Usage;
 
 use Config::General;
 use YAML qw/LoadFile/;
-use Bett::Model::DB;
-use Bett::Schema;
+use Aca::Model::DB;
+use Aca::Schema;
 
 package Script;
 
@@ -27,9 +27,9 @@ has 'genre' => (
 
 package main;
 
-my %config = Config::General->new( "bett.conf" )->getall;
-my $connect_info = Bett::Model::DB->config->{connect_info};
-my $schema = Bett::Schema->connect( $connect_info );
+my $config = LoadFile "aca.yaml";
+my $connect_info = Aca::Model::DB->config->{connect_info};
+my $schema = Aca::Schema->connect( $connect_info );
 
 my $script = Script->new_with_options;
 my $id = $script->id;
@@ -49,6 +49,8 @@ if ( not $genre ) {
 	{ id => $id})->first->delete;
 }
 else {
+	$class = $schema->resultset('Word')->search(
+	{ exercise => $id})->delete;
 	$class = $schema->resultset('Exercise')->find(
 	{ genre => $genre, id => $id})->delete;
 }
@@ -56,7 +58,7 @@ else {
 
 =head1 NAME
 
-delete_exercise.pl - delete exercise in bett DB from commandline
+delete_exercise.pl - delete exercise in aca DB from commandline
 
 =head1 SYNOPSIS
 
@@ -65,6 +67,7 @@ perl script/delete_exercise.pl -i careers -g business
 =head1 DESCRIPTION
 
 DELETE FROM exercise where id='careers' and genre='business';
+DELETE FROM word where exercise='careers';
 
 It is used to remove exercises. So be careful. But we support
 
