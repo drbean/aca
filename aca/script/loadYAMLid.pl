@@ -67,8 +67,21 @@ for my $sublist_name ( @ids ) {
 	for my $word ( keys %$sublist ) {
 		push @vocab, [ 'base', $word, $sublist->{$word}, $sublist_name ]
 	}
-	$w->populate(\@vocab);
+	uptodatepopulate("Word", \@vocab);
 	warn "$sublist_name sublist missing" unless @vocab > 1;
+}
+
+sub uptodatepopulate
+{
+	my $class = $schema->resultset(shift);
+	my $entries = shift;
+	my $columns = shift @$entries;
+	foreach my $row ( @$entries )
+	{
+		my %hash;
+		@hash{@$columns} = @$row;
+		$class->update_or_create(\%hash);
+	}
 }
 
 
