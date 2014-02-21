@@ -6,7 +6,7 @@ use base 'Catalyst::Model::DBIC::Schema';
 # use Aca;
 
 # my $name = Aca->config->{database};
-my $name = "aca021";
+my $name = "aca022";
 
 __PACKAGE__->config(
     schema_class => 'Aca::Schema',
