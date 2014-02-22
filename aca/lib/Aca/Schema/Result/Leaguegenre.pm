@@ -1,4 +1,4 @@
-package dic::Schema::Leaguegenre;
+package Aca::Schema::Leaguegenre;
 
 use strict;
 use warnings;
