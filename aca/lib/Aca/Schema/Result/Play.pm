@@ -107,22 +107,22 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("player", "league", "word", "exercise");
 
-=head1 RELATIONS
-
-=head2 member
-
-Type: belongs_to
-
-Related object: L<Aca::Schema::Result::Member>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "member",
-  "Aca::Schema::Result::Member",
-  { league => "player", player => "league" },
-  { is_deferrable => 0, on_delete => "CASCADE", on_update => "CASCADE" },
-);
+# =head1 RELATIONS
+# 
+# =head2 member
+# 
+# Type: belongs_to
+# 
+# Related object: L<Aca::Schema::Result::Member>
+# 
+# =cut
+# 
+# __PACKAGE__->belongs_to(
+#   "member",
+#   "Aca::Schema::Result::Member",
+#   { league => "player", player => "league" },
+#   { is_deferrable => 0, on_delete => "CASCADE", on_update => "CASCADE" },
+# );
 
 
 # Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-10-20 22:14:12
