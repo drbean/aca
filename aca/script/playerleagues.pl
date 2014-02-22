@@ -19,15 +19,15 @@ my $schema = Aca::Schema->connect( $connect_info );
 
 my $leaguegenres = [
 			[ qw/league genre/ ],
-			[ "GL00005",	1 ],
-			[ "GL00019",	1 ],
-			[ "FLA0021",	2 ],
-			[ "FLA0027",	9 ],
-			[ "FLA0018",	1 ],
-			[ "AFB1J0",	8 ],
-			[ "AFBB32",	1 ],
-			[ "40112040",	1 ],
-			[ "40113024",	1 ],
+			[ "GL00005",	"conversation" ],
+			[ "GL00019",	"conversation" ],
+			[ "FLA0021",	"business" ],
+			[ "FLA0027",	"tech" ],
+			[ "FLA0018",	"conversation" ],
+			[ "AFB1J0",	"call" ],
+			[ "AFBB32",	"conversation" ],
+			[ "40112040",	"intermediate" ],
+			[ "40113024",	"conversation" ],
 		];
 
 my @leagueids = map $_->[0], @$leaguegenres[1..$#$leaguegenres];
@@ -56,7 +56,7 @@ uptodatepopulate( 'League', $leagues );
 #			[ 8, "multimedia" ],
 #			] );
 
-#uptodatepopulate( 'Leaguegenre', $leaguegenres );
+uptodatepopulate( 'Leaguegenre', $leaguegenres );
 
 push @{$players->{officials}}, [split] for <<OFFICIALS =~ m/^.*$/gm;
 193001	DrBean	ok
