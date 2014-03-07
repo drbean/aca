@@ -96,10 +96,10 @@ for my $player ( keys %members ) {
 		}
 		$report->{points}->{$player}->{pre_test}->{attempted} = $pre_total;
 		$report->{points}->{$player}->{pre_test}->{correct} = $pre_correct;
-		$report->{points}->{$player}->{post_test}->{attempted} = $post_total;
-		$report->{points}->{$player}->{post_test}->{correct} = $post_correct;
+		$report->{points}->{$player}->{post_test}->{attempted} = 180;
+		$report->{points}->{$player}->{post_test}->{correct} = $targeted;
 		$report->{points}->{$player}->{post_test}->{targeted} = $targeted;
-		$report->{points}->{$player}->{post_test}->{improvement} = $improvement;
+		$report->{points}->{$player}->{post_test}->{improvement} = $targeted;
 	}
 	else {
 		$report->{points}->{$player}->{answers} = 0;
@@ -112,7 +112,7 @@ for my $player ( keys %members ) {
 for my $player ( keys %members ) {
 	$report->{exam_maximum} = $score_spread;
 	$report->{grade}->{$player} = 3 + 2 *
-		$report->{points}->{$player}->{post_test}->{improvement} / $score_spread;
+		$report->{points}->{$player}->{post_test}->{improvement} / 150;
 	Bless( $report->{points}->{$player} )->keys(
 		[ qw/pre_test post_test/ ] );
 }
