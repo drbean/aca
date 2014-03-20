@@ -2,8 +2,12 @@
 
 <h1>CONGRATULATIONS</h1>
 
-You wrote down translations for 18O words.
+You wrote down translations for [% progress %] words.
 </br>
+
+Now go to elearning and find 4 difficult sports words.
+
+<!--
 
 Now start learning the words for the Exam in Week 9.
 </br>
@@ -43,3 +47,4 @@ Or download the cards from Dr Bean's site as text files and import them yourselv
 <li><a href="http://web.nuu.edu.tw/~greg/call/awl_freq_1.txt">Sublist 3 as text file</a>
 </ul>
 
+-->
