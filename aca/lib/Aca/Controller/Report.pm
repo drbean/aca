@@ -39,11 +39,11 @@ sub grade :Path :Args(0) {
 	my ( $self, $c ) = @_;
 	my $id = $c->session->{player_id};
 	my $league   = $c->session->{league};
-	my $exercise = "base";
+	my $exercise = "sport";
 	my $words = $c->model("DB::Word")->search({
-		exercise => "base" });
+		exercise => "sport" });
 	my $base = $c->model("DB::Play")->search({
-		league => $league, exercise => "base", player => $id });
+		league => $league, exercise => "sport", player => $id });
 	my $word_total= $words->count;
 	my $pre_total= $base->count;
 	$words->reset;
