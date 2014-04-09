@@ -2,11 +2,11 @@
 
 =head1 NAME
 
-loadYAMLid.pl -- Load a number of text with questions from a YAML file
+loadYAMLid.pl -- Load a number of sublists from a YAML wordlist file
 
 =head1 SYNOPSIS
 
-loadYAMLid.pl data/business.yaml careercandidate
+loadYAMLid.pl data/wordlist.yaml fitness-theory activities weight-training
 
 =head1 DESCRIPTION
 
