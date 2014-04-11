@@ -40,10 +40,13 @@
 [% END %]
 </TABLE>
 
+<br>
 Download a personalized Anki <a href="http://web.nuu.edu.tw/~greg/tech/flash/[% player %].txt">flashcard deck with the words targeted for [% player %] in the exam</a>.
+</br>
 
+<br>
 Use the <a href="http://ankisrs.net">Anki</a> or <a href="http://mnemosyne-proj.org">Mnemosyne</a> flash card software.
 </br>
 
 
-The download method for the file, named [% player %].txt, will depend on the browser. It's &lt;Alt-click&gt; or &lt;Ctrl-click&gt; or something. On Firefox, view the file, then &lt;Right-click&gt; and click "Save as ..".
+The download method for the file, named [% player %].txt, will depend on the browser. It's &lt;Alt-Left-click&gt; or &lt;Ctrl-Left-click&gt; or something. On Firefox, view the file, then &lt;Right-click&gt; and click "Save as ..".
