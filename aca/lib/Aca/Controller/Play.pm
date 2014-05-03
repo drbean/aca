@@ -196,8 +196,7 @@ GAME OVER, or loop back to REPL.
 sub exchange :Chained('update') :PathPart('') :Args(0) {
 	my ( $self, $c ) = @_;
 	if ( $c->stash->{gameover} ) {
-		$c->stash->{ template } = 'over.tt2';
-		return;
+		$c->detach("Report", 'grade');
 	}
 	my $standing = $c->stash->{standing};
 	my $answers;
