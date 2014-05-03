@@ -39,11 +39,11 @@ sub grade :Path :Args(0) {
 	my ( $self, $c ) = @_;
 	my $id = $c->session->{player_id};
 	my $league   = $c->session->{league};
-	my $exercise = "sport";
+	my $exercise = "computing";
 	my $words = $c->model("DB::Word")->search({
-		exercise => "sport" });
+		exercise =>  $exercise});
 	my $base = $c->model("DB::Play")->search({
-		league => $league, exercise => "sport", player => $id });
+		league => $league, exercise => $exercise, player => $id });
 	my $word_total= $words->count;
 	my $pre_total= $base->count;
 	$words->reset;
@@ -99,7 +99,7 @@ Private method used by report action to put flashcards on http://web.nuu.edu.tw/
 sub ftp : Private {
     my ($self, $c, $flash, $id) = @_;
     my $ftp = Net::FTP->new('web.nuu.edu.tw');
-    $ftp->login('greg', '6y6t6y6t');
+    $ftp->login('greg', '');
     my $config = $c->config;
     my $leaguedirs = $config->{leagues};
     my %leaguesByGenre;
