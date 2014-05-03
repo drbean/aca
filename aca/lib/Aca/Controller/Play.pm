@@ -47,11 +47,12 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 		->search({ player => $player,
 		exercise => $exercise,
 		league => $league });
+	my $base = "computing";
 	my $word_bank = $c->model("DB::Word")
-		->search({ exercise => 'sport' });
+		->search({ exercise => $base });
 	my $play = $c->model("DB::Play")
 		->search({ player => $player,
-		exercise => "sport",
+		exercise => $base,
 		league => $league });
 	my @word;
 	while ( my $word = $word_bank->next ) {
@@ -65,8 +66,8 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 		}
 	}
 	@word = $c->model("DB::Word")
-		->search({ exercise => 'sport' }) unless @word;
-	if ( $standing->count == @word ) {
+		->search({ exercise => $base }) unless @word;
+	if ( $standing->count >= $word_bank->count ) {
 		$c->stash(gameover => 1);
 		$c->detach('exchange');
 	}
