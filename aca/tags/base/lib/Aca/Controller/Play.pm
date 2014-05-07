@@ -47,31 +47,13 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 		->search({ player => $player,
 		exercise => $exercise,
 		league => $league });
-	my $base = "computing";
-	my $word_bank = $c->model("DB::Word")
-		->search({ exercise => $base });
-	my $play = $c->model("DB::Play")
-		->search({ player => $player,
-		exercise => $base,
-		league => $league });
-	my @word;
-	while ( my $word = $word_bank->next ) {
-		my $head = $word->head;
-		my $my_answer;
-		if ( my $my_word = $play->find({ word => $head }) ) {
-			$my_answer = $my_word->answer;
-		}
-		if ( $my_answer and $my_answer ne $word->answer ) {
-			push @word, $word;
-		}
-	}
-	@word = $c->model("DB::Word")
-		->search({ exercise => $base }) unless @word;
-	if ( $standing->count >= $word_bank->count ) {
+	if ( $standing->count == 179 ) {
 		$c->stash(gameover => 1);
 		$c->detach('exchange');
 	}
-	$c->stash(word => \@word);
+	my $word = $c->model("DB::Word")
+		->search({ exercise => $exercise });
+	$c->stash(word => $word);
 	$c->stash(standing => $standing);
 	$c->stash(course => $mycourse);
 	$c->stash(player => $player);
@@ -130,6 +112,7 @@ sub update :Chained('try') :PathPart('') :CaptureArgs(0) {
 	my $last_try = $c->stash->{last_try};
 	my $in_play = $c->stash->{in_play};
 	my $words = $c->stash->{word};
+	$words->reset;
 	my (%dupes, %values, %value_dupes, $error_msg);
 	for ( keys %$in_play ) {
 		my $value = $in_play->{$_};
@@ -151,11 +134,11 @@ sub update :Chained('try') :PathPart('') :CaptureArgs(0) {
 		for my $value ( keys %value_dupes ) {
 			my $keys = $value_dupes{$value};
 			my $first_word = shift @$keys;
-			#for my $dupe ( @$keys ) {
-			#	$error_msg .= "<br> You gave '$first_word' and '$dupe' the same \
-#translation, '$value'. Choose a different translation for one of them. </br> ";
-			#}
-			#$error_msg .= "<br/>";
+			for my $dupe ( @$keys ) {
+				$error_msg .= "<br> You gave '$first_word' and '$dupe' the same \
+translation, '$value'. Choose a different translation for one of them. </br> ";
+			}
+			$error_msg .= "<br/>";
 		}
 	}
 	for my $word ( %$in_play ) {
@@ -168,20 +151,21 @@ sub update :Chained('try') :PathPart('') :CaptureArgs(0) {
 			$dupes{ $word_in_standing } = $answer;
 			push @{ $value_dupes{$answer} }, $word;
 			push @{ $value_dupes{$answer} }, $word_in_standing;
-			# $error_msg .= "<br> Previously, you gave '$word_in_standing' the same \
-# translation as '$word', namely, '$answer'. Choose a different translation for one \
-# of them. </br> ";
+			$error_msg .= "<br> Previously, you gave '$word_in_standing' the same \
+translation as '$word', namely, '$answer'. Choose a different translation for one \
+of them. </br> ";
 		}
-		#if ( $value_dupes{$answer} ) {
-		#	$existing_words->delete unless $existing_words == 0;
-		#}
-		#else {
+		if ( $value_dupes{$answer} ) {
+			$existing_words->delete unless $existing_words == 0;
+		}
+		else {
 			$standing->create({ word => $word, answer => $answer,
 			try => $c->stash->{try} });
-		#}
+		}
 	}
 	my $progress = $standing->count;
 		$c->stash({ progress => $progress });
+		$words->reset;
 		$c->stash(dupes => \%dupes);
 		$c->stash({error_msg => $error_msg});
 		$c->stash({ word => $words });
@@ -196,7 +180,8 @@ GAME OVER, or loop back to REPL.
 sub exchange :Chained('update') :PathPart('') :Args(0) {
 	my ( $self, $c ) = @_;
 	if ( $c->stash->{gameover} ) {
-		$c->detach("Report", 'grade');
+		$c->stash->{ template } = 'over.tt2';
+		return;
 	}
 	my $standing = $c->stash->{standing};
 	my $answers;
