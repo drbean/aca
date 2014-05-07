@@ -81,6 +81,6 @@ Then, install the <a href="http://ankisrs.net">Anki</a> or <a href="http://mnemo
 </br>
 
 <br>
-Create a new deck, sports, and import the file into the sports deck.
+Create a new deck, [% exercise %], and import the file into the [% exercise %] deck.
 </br>
 
