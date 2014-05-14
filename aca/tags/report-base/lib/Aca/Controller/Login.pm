@@ -75,14 +75,14 @@ sub index : Path : Args(0) {
 			if ( defined $c->session->{exercise} ) {
 				my $exercise = $c->session->{exercise};
 				$c->response->redirect(
-					$c->uri_for("/play/$exercise"), 303 );
+					$c->uri_for("/report"), 303 );
 			}
 			else {
 				my $league = $leagues[0]->id;
 				$c->session->{league} = $league;
 				$exercise = $c->forward( 'get_exercise', [ $league ] ) unless $exercise;
 				$c->session->{exercise} = $exercise if $exercise;
-				$c->response->redirect($c->uri_for( "/play/setup"));
+				$c->response->redirect($c->uri_for( "/report"));
 			}
 			return;
 		}
@@ -119,7 +119,7 @@ sub official : Local {
 			$c->model('dicDB::Jigsawrole')->update_or_create(
 				{ league => $league, player => $username, role => $jigsawrole } )
 					if defined $jigsawrole;
-			$c->response->redirect($c->uri_for("/play/setup"), 303);
+			$c->response->redirect($c->uri_for("/report"), 303);
 			return;
 		}
 		else {
@@ -150,7 +150,7 @@ sub membership : Local {
 	$c->session->{exercise} = $exercise if $exercise;
 	if ( $exercise ) {
 		$c->response->redirect(
-			$c->uri_for( "/play/setup" ));
+			$c->uri_for( "/report" ));
 	}
 	else {
 		$c->response->redirect( $c->uri_for("/exercises/list"), 303 );
