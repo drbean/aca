@@ -18,8 +18,8 @@
 </TABLE>
 <TABLE>
 <TR><TD>Word:  <TD>Translation:
-[% FOREACH one IN word %]
-[% head = one.head %]
+[% WHILE (one = standing.next) %]
+[% head = one.word %]
 <TR><TD>[% head %] <TD>
 [% IF answers.$head %] [% answers.$head %]
 [% ELSE %] <INPUT type="text" size=4 name="[% head %]" >
