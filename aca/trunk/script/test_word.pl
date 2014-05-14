@@ -55,6 +55,7 @@ my $word_bank = $schema->resultset("Word")
 	->search({ exercise => $base });
 
 my $pop_array = [ [qw/ word answer player league try exercise /] ];
+my $pop_hash;
 
 for my $player ( '193001' ) {
 	my @word;
@@ -69,7 +70,7 @@ for my $player ( '193001' ) {
 		}
 		if ( $my_answer and $my_answer ne $word->answer ) {
 			push @$pop_array, [ $head, undef, $player, $league_id, undef, $test ];
-			push @$pop_hash, { head => $head, answer => undef, player => $player,
+			push @$pop_hash, { word => $head, answer => undef, player => $player,
 				league => $league_id, try => undef, exercise => $test };
 		}
 	}
@@ -77,7 +78,7 @@ for my $player ( '193001' ) {
 
 $DB::single=1;
 
-$schema->resultset("Play")->populate( $pop_array );
+$schema->resultset("Play")->update_or_create( $_ ) for @$pop_hash;
 
 =head1 NAME
 
