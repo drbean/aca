@@ -155,7 +155,7 @@ sub update :Chained('try') :PathPart('') :CaptureArgs(0) {
 			try => $c->stash->{try} });
 		#}
 	}
-	my $progress = $standing->count;
+	my $progress = $standing->search({ answer => undef })->count;
 		$c->stash({ progress => $progress });
 		$c->stash(dupes => \%dupes);
 		$c->stash({error_msg => $error_msg});

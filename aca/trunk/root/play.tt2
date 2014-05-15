@@ -14,7 +14,7 @@
 <INPUT type="submit" name="Submit" value="Submit">
 <TABLE>
 <TR>
-<TD>[% progress %] <TD>translation(s) finished.
+<TD>[% progress %] <TD>translation(s) to go.
 </TABLE>
 <TABLE>
 <TR><TD>Word:  <TD>Translation:
