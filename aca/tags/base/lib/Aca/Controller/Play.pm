@@ -47,12 +47,12 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 		->search({ player => $player,
 		exercise => $exercise,
 		league => $league });
-	if ( $standing->count == 179 ) {
+	my $word = $c->model("DB::Word")
+		->search({ exercise => $exercise });
+	if ( $standing->count >= $word->count ) {
 		$c->stash(gameover => 1);
 		$c->detach('exchange');
 	}
-	my $word = $c->model("DB::Word")
-		->search({ exercise => $exercise });
 	$c->stash(word => $word);
 	$c->stash(standing => $standing);
 	$c->stash(course => $mycourse);
