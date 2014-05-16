@@ -57,7 +57,7 @@ my $word_bank = $schema->resultset("Word")
 my $pop_array = [ [qw/ word answer player league try exercise /] ];
 my $pop_hash;
 
-for my $player ( '193001' ) {
+for my $player ( @members ) {
 	my @word;
 	$word_bank->reset;
 	while ( my $word = $word_bank->next ) {
