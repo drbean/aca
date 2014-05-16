@@ -49,7 +49,7 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 		league => $league });
 	my $word = $c->model("DB::Word")
 		->search({ exercise => $exercise });
-	if ( $standing->count >= $word->count ) {
+	if ( $standing->count >= ($word->count - 1) ) {
 		$c->stash(gameover => 1);
 		$c->detach('exchange');
 	}
