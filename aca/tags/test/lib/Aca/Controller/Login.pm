@@ -59,8 +59,8 @@ sub index : Path : Args(0) {
 				->first->genre;
 			$c->session->{genre} = $genre;
 			for my $membership (@memberships) {
-				push @leagues, $membership->league if
-					$membership->league->genre->genre eq $genre;
+				push @leagues, 'FLA0027';  #if
+				#$membership->league->genre->genre eq $genre;
 			}
 			if ( @leagues > 1 ) {
 				$c->stash->{id}	   = $id;
