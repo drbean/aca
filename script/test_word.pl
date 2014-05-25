@@ -56,10 +56,12 @@ my $word_bank = $schema->resultset("Word")
 
 my $pop_array = [ [qw/ word answer player league try exercise /] ];
 my $pop_hash;
+my %play_data;
 
 for my $player ( @members ) {
 	my @word;
 	$word_bank->reset;
+	$play_data{$player} = 0;
 	while ( my $word = $word_bank->next ) {
 		my $head = $word->head;
 		my $my_answer;
@@ -70,6 +72,15 @@ for my $player ( @members ) {
 		}
 		if ( $my_answer and $my_answer ne $word->answer ) {
 			push @$pop_array, [ $head, undef, $player, $league_id, undef, $test ];
+			push @$pop_hash, { word => $head, answer => undef, player => $player,
+				league => $league_id, try => undef, exercise => $test };
+			$play_data{$player}++;
+		}
+	}
+	if ( $play_data{$player} == 0 ) {
+		$word_bank->reset;
+		while ( my $word = $word_bank->next ) {
+			my $head = $word->head;
 			push @$pop_hash, { word => $head, answer => undef, player => $player,
 				league => $league_id, try => undef, exercise => $test };
 		}
@@ -86,14 +97,20 @@ test_word.pl - create oxercise rows in word table for test exercise
 
 =head1 SYNOPSIS
 
-perl script/create_exercise.pl -t awl -g multimedia -i base -d 'Baseline for learning of Academic Word List sublists 1-3'
+perl script/test_word.pl -b base -t test -l FLA0027
 
 =head1 DESCRIPTION
 
-INSERT INTO exercise (description, genre, id, type) VALUES (?, ?, ?, ?. ?)
+INSERT INTO play (word, answer, player, league, try, exercise) VALUES (?, ?, ?, ?. ?)
+
+player, league, word, exercise are PRIMARY KEY. 
 
 Words which players attempted but got wrong on the 'base' pre-test are inserted in the 'play' table for the 'test' exercise.
-Actually DELETE and INSERT. So it can be used to remove and add exercises. So be careful.
+Actually DELETE and INSERT. So it can be used to remove and add words. So be careful.
+
+Players who did not do the base pre-test get to do all the words in the pre-test (and will be given the mininum score, 3/5 by grade_aca.pl).
+
+This memoizing of the wrong pre-test words may not be necessary if the test is run with fastcgi.pl.
 
 =head1 AUTHOR
 
