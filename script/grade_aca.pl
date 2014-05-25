@@ -61,13 +61,13 @@ my %members = map { $_->{id} => $_ } @$members;
 my ($report, $card);
 $report->{exercise} = $exercise;
 my $words = $schema->resultset("Word")->search({
-		exercise => "base" });
+		exercise => "computing" });
 my $answers = $schema->resultset("Play")->search({
 		league => $id });
 my $score_spread = 0;
 for my $player ( keys %members ) {
 	my $standing = $answers->search({ player => $player, exercise => $exercise });
-	my $base = $answers->search({ player => $player, exercise => 'base' });
+	my $base = $answers->search({ player => $player, exercise => 'computing' });
 	my $improvement;
 	if ( $standing and $standing != 0 ) {
 		my $post_total = $standing->count;
@@ -77,7 +77,7 @@ for my $player ( keys %members ) {
 		my $target_flag;
 		while ( my $word = $words->next ) {
 		    my $head = $word->head;
-		    next if $head eq 'shift';
+		    next if $head eq 'shift' or $head eq 'course';
 		    my $pre = $base->find({word => $head});
 # $DB::single=1 unless $pre and $pre->answer;
 		    if ( $pre and $pre->answer eq $word->answer ) {
@@ -122,7 +122,7 @@ for my $player ( keys %members ) {
 		[ qw/pre_test post_test/ ] );
 }
 
-print Dump $report;
+print Dump $report, $report->{grade};
 
 =head1 NAME
 
@@ -130,7 +130,7 @@ grade_aca.pl - record results from aca DB
 
 =head1 SYNOPSIS
 
-perl script_files/grade_dic.pl -l GL00016 -x rueda -o 20 -t 85 > ../001/GL00016/homework/5.yaml
+perl script_files/grade_dic.pl -l GL00016 -x computing-test > ../001/GL00016/exam/g.yaml
 
 =cut
 
