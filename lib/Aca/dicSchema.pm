@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use FindBin qw/$Bin/;
 
-use lib "$Bin/../../dic/lib";
+use lib "$Bin/../../../Dic/lib";
 
 use base 'DBIx::Class::Schema';
 
