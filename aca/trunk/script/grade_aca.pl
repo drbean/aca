@@ -61,25 +61,26 @@ my %members = map { $_->{id} => $_ } @$members;
 my ($report, $card);
 $report->{exercise} = $exercise;
 my $words = $schema->resultset("Word")->search({
-		exercise => "computing" });
-my $answers = $schema->resultset("Play")->search({
-		league => $id });
+		exercise => "sport" });
+my $answers = $schema->resultset("Play", exercise => $exercise);
+my $makeup = $answers->search({ exercise => "$exercise-makeup",
+		league => $leagueid });
+my $base = $answers->search({ exercise => 'sport', league => $leagueid });
 my $score_spread = 0;
 for my $player ( keys %members ) {
-	my $standing = $answers->search({ player => $player, exercise => $exercise });
-	my $base = $answers->search({ player => $player, exercise => 'computing' });
-	my $improvement;
+	my $standing = $answers->search({ player => $player });
+	my $base_standing = $base->search({ player => $player });
+	my $makeup_standing = $makeup->search({ player => $player });
+	my ($improvement, $post_total) = (0) x 2;
 	if ( $standing and $standing != 0 ) {
-		my $post_total = $standing->count;
-		my $pre_total= $base->count;
+		my $pre_total= $base_standing->count;
 		$words->reset;
 		my ($pre_correct, $post_correct, $targeted, $improvement) = (0) x 4;
 		my $target_flag;
 		while ( my $word = $words->next ) {
 		    my $head = $word->head;
 		    next if $head eq 'shift' or $head eq 'course';
-		    my $pre = $base->find({word => $head});
-# $DB::single=1 unless $pre and $pre->answer;
+		    my $pre = $base_standing->find({word => $head});
 		    if ( $pre and $pre->answer eq $word->answer ) {
 				$pre_correct++;
 			}
@@ -87,11 +88,29 @@ for my $player ( keys %members ) {
 				$targeted++;
 				$target_flag = 1;
 			}
-		    my $post = $standing->find({word => $head});
-		    if ( $post and $post->answer eq $word->answer ) {
-				$post_correct++;
-				$improvement++ if $target_flag;
+			my ($test_post_correct, $test_improvement, $test_post_total) =
+										(0) x 3;
+		    my $posts = $standing->search({word => $head});
+		    my $makeup_post = $makeup_standing->find({word => $head});
+			while ( my $post = $posts->next ) {
+				if ( $post and $post->answer ) {
+					$test_post_total++;
+					if ( $post->answer eq $word->answer ) {
+						$test_post_correct++;
+						$test_improvement++;
+					}
+				}
 			}
+			if ( $makeup_post and $makeup_post->answer ) {
+					$test_post_total++;
+				if ( $makeup_post->answer eq $word->answer ) {
+					$test_post_correct++;
+					$test_improvement++;
+				}
+			}
+			$post_correct++ if $test_post_correct;
+			$improvement++ if $test_improvement && $target_flag;
+			$post_total++ if $test_post_total;
 			$target_flag = 0;
 		}
 		$report->{points}->{$player}->{pre_test}->{attempted} = $pre_total;
@@ -130,29 +149,15 @@ grade_aca.pl - record results from aca DB
 
 =head1 SYNOPSIS
 
-perl script_files/grade_dic.pl -l GL00016 -x computing-test > ../001/GL00016/exam/g.yaml
-
-=cut
-
-=head1 SYNOPSIS
-
-perl script/grade_bett.pl -l FIA0034 -x adventure -q 4 -l 1 -w 2 > /home/drbean/002/FIA0034/homework/2.yaml
-
-=head1 DESCRIPTION
-
-Above 20 percent, grade of hwMax/2. Above 85 percent of the letters, a (perfect) grade of hwMax. No roles. Uses play table, rather than words. If no -o or -t (one and two) options, then correct/total percent of hwMax.
+perl script_files/grade_aca.pl -l GL00016 -x sports-test > ../001/GL00016/exam/g.yaml
 
 =cut
 
 =head1 DESCRIPTION
 
-SELECT * FROM {wh,yn,s} WHERE league='FIA0034';
+This version involved the pre-test 'sport', the test 'sports-test', where forgetting to create the exercise forced me to hack Login.pm, which resulted in database inserts with an empty string league. Players not helped by that Login.pm hack were helped by a second hack, following which the other players relogged in resulting in attempts to insert with same primary key(?). The next night, a 'sports-test-makeup' exam was held. 
 
-People who quit with q good questions get a score, perhaps. Players who get to GAME OVER, but who fail to be winners, ie are losers, get l points, and winners get w points.
-
-Output numbers of grammatically-correct questions, correct answers, questions attempted in the wh, yn and s courses.
-
-If correct question quota is filled, but answer quota not filled, player is treated as Loser, not Quitter.
+=cut
 
 =head1 AUTHOR
 
