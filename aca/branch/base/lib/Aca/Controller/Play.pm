@@ -159,7 +159,7 @@ of them. </br> ";
 			$existing_words->delete unless $existing_words == 0;
 		}
 		else {
-			$standing->create({ word => $word, answer => $answer,
+			$standing->update_or_create({ word => $word, answer => $answer,
 			try => $c->stash->{try} });
 		}
 	}
