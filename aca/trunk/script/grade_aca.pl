@@ -61,7 +61,7 @@ my %members = map { $_->{id} => $_ } @$members;
 my ($report, $card);
 $report->{exercise} = $exercise;
 my $words = $schema->resultset("Word")->search({
-		exercise => "computing" });
+		exercise => "academic" });
 my $answers = $schema->resultset("Play")->search({
 		league => $id });
 my $score_spread = 0;
