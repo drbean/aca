@@ -65,7 +65,7 @@ for my $sublist_name ( @ids ) {
 	my $sublist_field = 3;
 	my $sublist = $list->{$sublist_name};
 	for my $word ( keys %$sublist ) {
-		push @vocab, [ 'computing', $word, $sublist->{$word}, $sublist_name ]
+		push @vocab, [ 'academic', $word, $sublist->{$word}, $sublist_name ]
 	}
 	uptodatepopulate("Word", \@vocab);
 	warn "$sublist_name sublist missing" unless @vocab > 1;
