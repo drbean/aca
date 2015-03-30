@@ -110,7 +110,7 @@ sub ftp : Private {
     my $tourid = $c->stash->{tournament};
     my $genre = $leaguegenre{$tourid};
     $ftp->cwd("/public_html/tech/flash");
-    my $deck = "$leaguedirs/FLA0027/flash/$id.txt";
+    my $deck = "$leaguedirs/FLA0026/flash/$id.txt";
     io($deck)->print
         ( $flash );
     $ftp->put($deck, "$id.txt");
