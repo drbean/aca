@@ -103,11 +103,11 @@ sub ftp : Private {
     my $config = $c->config;
     my $leaguedirs = $config->{leagues};
     my %leaguesByGenre;
-    my @genres = qw/conversation business friends customs media multimedia college literature       +intercultural/;
+    my @genres = qw/conversation business call esp tech friends customs media multimedia college literature       intercultural/;
     $leaguesByGenre{$_} = $config->{ $_ } for @genres;
     my %leaguegenre = map { my $genre = $_ ;  my $leagues = $leaguesByGenre{$genre};
                         map { $_ => $genre } @$leagues } @genres;
-    my $tourid = $c->stash->{tournament};
+    my $tourid = $c->stash->{league};
     my $genre = $leaguegenre{$tourid};
     $ftp->cwd("/public_html/tech/flash");
     my $deck = "$leaguedirs/FLA0026/flash/$id.txt";
