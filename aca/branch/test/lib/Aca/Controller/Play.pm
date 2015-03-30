@@ -67,7 +67,7 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 	}
 	@word = $c->model("DB::Word")
 		->search({ exercise => $base }) unless @word;
-	if ( $standing->count >= $word_bank->count ) {
+	if ( $standing->count >= scalar @word ) {
 		$c->stash(gameover => 1);
 		$c->detach('exchange');
 	}
