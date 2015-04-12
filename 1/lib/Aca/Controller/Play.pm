@@ -47,6 +47,31 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 		->search({ player => $player,
 		exercise => $exercise,
 		league => $league });
+	my $base = "academic";
+	my $word_bank = $c->model("DB::Word")
+		->search({ exercise => $base });
+	my $play = $c->model("DB::Play")
+		->search({ player => $player,
+		exercise => $base,
+		league => $league });
+	my @word;
+	while ( my $word = $word_bank->next ) {
+		my $head = $word->head;
+		my $my_answer;
+		if ( my $my_word = $play->find({ word => $head }) ) {
+			$my_answer = $my_word->answer;
+		}
+		if ( $my_answer and $my_answer ne $word->answer ) {
+			push @word, $word;
+		}
+	}
+	@word = $c->model("DB::Word")
+		->search({ exercise => $base }) unless @word;
+	if ( $standing->count >= scalar @word ) {
+		$c->stash(gameover => 1);
+		$c->detach('exchange');
+	}
+	$c->stash(word => \@word);
 	$c->stash(standing => $standing);
 	$c->stash(course => $mycourse);
 	$c->stash(player => $player);
@@ -155,7 +180,7 @@ sub update :Chained('try') :PathPart('') :CaptureArgs(0) {
 			try => $c->stash->{try} });
 		#}
 	}
-	my $progress = $standing->search({ answer => undef })->count;
+	my $progress = $standing->count;
 		$c->stash({ progress => $progress });
 		$c->stash(dupes => \%dupes);
 		$c->stash({error_msg => $error_msg});
@@ -179,8 +204,6 @@ sub exchange :Chained('update') :PathPart('') :Args(0) {
 	while ( my $play = $standing->next ) {
 		$answers->{$play->word} = $play->answer if $play->answer;
 	}
-	$standing->reset;
-	$c->stash({ standing => $standing });
 	$c->stash({ answers => $answers });
 	$c->stash->{ template } = 'play.tt2';
 }

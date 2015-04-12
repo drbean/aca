@@ -39,20 +39,21 @@ sub grade :Path :Args(0) {
 	my ( $self, $c ) = @_;
 	my $id = $c->session->{player_id};
 	my $league   = $c->session->{league};
-	my $exercise = $c->session->{exercise};
+	my $base = "academic";
+	my $exercise = "academic-test";
 	my $words = $c->model("DB::Word")->search({
-		exercise =>  $exercise});
-	my $base = $c->model("DB::Play")->search({
+		exercise => $base});
+	my $base_play = $c->model("DB::Play")->search({
 		league => $league, exercise => $exercise, player => $id });
 	my $word_total= $words->count;
-	my $pre_total= $base->count;
+	my $pre_total= $base_play->count;
 	$words->reset;
 	my $pre_correct = 0;
 	my (%answers, %wrong, %flash, %right, %passed);
 	while ( my $word = $words->next ) {
 		my $head = $word->head;
 		next if $head eq 'shift';
-		my $pre = $base->find({word => $head});
+		my $pre = $base_play->find({word => $head});
 		my $answer = $word->answer;
 		$answers{$head} = $answer;
 # $DB::single=1 if $head eq "vary";
