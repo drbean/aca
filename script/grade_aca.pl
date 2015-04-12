@@ -67,7 +67,7 @@ my $answers = $schema->resultset("Play")->search({
 my $score_spread = 0;
 for my $player ( keys %members ) {
 	my $standing = $answers->search({ player => $player, exercise => $exercise });
-	my $base = $answers->search({ player => $player, exercise => 'computing' });
+	my $base = $answers->search({ player => $player, exercise => 'academic' });
 	my $improvement;
 	if ( $standing and $standing != 0 ) {
 		my $post_total = $standing->count;
