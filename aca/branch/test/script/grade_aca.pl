@@ -61,13 +61,13 @@ my %members = map { $_->{id} => $_ } @$members;
 my ($report, $card);
 $report->{exercise} = $exercise;
 my $words = $schema->resultset("Word")->search({
-		exercise => "academic" });
+		exercise => "cooking" });
 my $answers = $schema->resultset("Play")->search({
 		league => $id });
 my $score_spread = 0;
 for my $player ( keys %members ) {
 	my $standing = $answers->search({ player => $player, exercise => $exercise });
-	my $base = $answers->search({ player => $player, exercise => 'academic' });
+	my $base = $answers->search({ player => $player, exercise => 'cooking' });
 	my $improvement;
 	if ( $standing and $standing != 0 ) {
 		my $post_total = $standing->count;
