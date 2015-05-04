@@ -28,15 +28,9 @@ has 'league' => (
 has 'exercise' => (
     traits => ['Getopt'], is => 'ro', isa => 'Str', required => 0,
     cmd_aliases => 'x',);
-has 'quitter' => (
+has 'base' => (
     traits => ['Getopt'], is => 'ro', isa => 'Int', required => 0,
-    cmd_aliases => 'q',);
-has 'loser' => (
-    traits => ['Getopt'], is => 'ro', isa => 'Int', required => 0,
-    cmd_aliases => 'o',);
-has 'winner' => (
-    traits => ['Getopt'], is => 'ro', isa => 'Int', required => 0,
-    cmd_aliases => 'w',);
+    cmd_aliases => 'b',);
 
 package main;
 
@@ -47,6 +41,7 @@ my $schema = Aca::Schema->connect( $connect_info );
 my $script = Script->new_with_options;
 my $id = $script->league;
 my $exercise = $script->exercise;
+my $base = $script->base;
 my $man = $script->man;
 my $help = $script->help;
 
@@ -61,14 +56,14 @@ my %members = map { $_->{id} => $_ } @$members;
 my ($report, $card);
 $report->{exercise} = $exercise;
 my $words = $schema->resultset("Word")->search({
-		exercise => "cooking" });
+		exercise => $base });
 my $wc = $words->count;
 my $answers = $schema->resultset("Play")->search({
 		league => $id });
 my $score_spread = 0;
 for my $player ( keys %members ) {
 	my $standing = $answers->search({ player => $player, exercise => $exercise });
-	my $base = $answers->search({ player => $player, exercise => "cooking"});
+	my $base = $answers->search({ player => $player, exercise => $base });
 	my $improvement;
 	if ( $standing and $standing != 0 ) {
 		my $post_total = $standing->count;
