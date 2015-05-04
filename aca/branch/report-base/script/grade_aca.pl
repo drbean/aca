@@ -115,6 +115,55 @@ for my $player ( keys %members ) {
 
 print Dump $report;
 
+print "report: |+\n";
+
+STDOUT->autoflush;
+$^L='';
+
+format STDOUT_TOP =
+  Player     Question Grammatical Answers   Total     Grade
+.
+
+for my $member (sort keys %members) {
+
+format STDOUT =
+@<@<<<<<<<<<< @###      @##       @##       @##       @##
+{ "  ", $member, $report->{points}->{$member}->{try}
+    , $report->{points}->{$member}->{question}
+    , $report->{points}->{$member}->{answer}
+    , $card->{$member}
+    , $report->{grade}->{$member}
+    }
+.
+
+    write;
+}
+
+$^='TOTAL_TOP';
+$~='TOTAL';
+$^L="\f";
+
+format TOTAL_TOP =
+  Class Totals
+             Question Grammatical Answers   Total     Grade
+.
+
+format TOTAL =
+  Class Totals
+             Question Grammatical Answers   Total     Grade
+@<@<<<<<<<<<< @###      @####     @####     @####     @##
+{ "", "", $total->{question}
+    , $total->{grammatical}
+    , $total->{answer}
+    , $total->{total}
+    , $total->{grade}
+    }
+.
+write;
+
+print Dump $report->{grade};
+
+
 =head1 NAME
 
 grade_aca.pl - record results from aca DB
