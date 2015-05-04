@@ -61,13 +61,14 @@ my %members = map { $_->{id} => $_ } @$members;
 my ($report, $card);
 $report->{exercise} = $exercise;
 my $words = $schema->resultset("Word")->search({
-		exercise => "base" });
+		exercise => "cooking" });
+my $wc = $words->count;
 my $answers = $schema->resultset("Play")->search({
 		league => $id });
 my $score_spread = 0;
 for my $player ( keys %members ) {
 	my $standing = $answers->search({ player => $player, exercise => $exercise });
-	my $base = $answers->search({ player => $player, exercise => 'base' });
+	my $base = $answers->search({ player => $player, exercise => "cooking"});
 	my $improvement;
 	if ( $standing and $standing != 0 ) {
 		my $post_total = $standing->count;
@@ -96,10 +97,10 @@ for my $player ( keys %members ) {
 		}
 		$report->{points}->{$player}->{pre_test}->{attempted} = $pre_total;
 		$report->{points}->{$player}->{pre_test}->{correct} = $pre_correct;
-		$report->{points}->{$player}->{post_test}->{attempted} = $post_total;
-		$report->{points}->{$player}->{post_test}->{correct} = $post_correct;
+		$report->{points}->{$player}->{post_test}->{attempted} = "<= $targeted";
+		$report->{points}->{$player}->{post_test}->{correct} = "??";
 		$report->{points}->{$player}->{post_test}->{targeted} = $targeted;
-		$report->{points}->{$player}->{post_test}->{improvement} =$improvement;
+		$report->{points}->{$player}->{post_test}->{improvement} = "??";
 	}
 	else {
 		$report->{points}->{$player}->{answers} = 0;
@@ -111,13 +112,8 @@ for my $player ( keys %members ) {
 
 for my $player ( keys %members ) {
 	$report->{exercise} = $exercise;
-	if ( $report->{points}->{$player}->{post_test}->{attempted} ) {
-		$report->{grade}->{$player} = sprintf( "%.2f", 3 + 2 *
-			$report->{points}->{$player}->{post_test}->{improvement} / $score_spread )
-	}
-	else {
-		$report->{grade}->{$player} = 0;
-	}
+	$report->{grade}->{$player} = sprintf( "%.2f", 2 *
+		$report->{points}->{$player}->{pre_test}->{attempted} / $wc );
 	Bless( $report->{points}->{$player} )->keys(
 		[ qw/pre_test post_test/ ] );
 }
