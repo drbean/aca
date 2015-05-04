@@ -25,7 +25,7 @@
 <TR><TD>[% head %] <TD>
 [% IF dupes.$head %] <INPUT type="text" size=4 name="[% head %]" value="[% dupes.$head %]">
 [% ELSIF answers.$head %] [% answers.$head %]
-[% ELSE %] <INPUT type="text" size=4 name="[% head %]" >
+[% ELSE %] <INPUT type="text" size=10 name="[% head %]" >
 [% END %]
 [% END %]
 </TABLE>
