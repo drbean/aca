@@ -61,6 +61,12 @@ my $wc = $words->count;
 my $answers = $schema->resultset("Play")->search({
 		league => $id });
 my $score_spread = 0;
+my $participants = 0;
+my $class_total = { pre_test => { attempted => 0, correct => 0 }
+			, post_test => {
+				attempted => 0, correct => 0, targeted => 0, improvement => 0 }
+			, average_grade => 0
+		};
 for my $player ( keys %members ) {
 	my $standing = $answers->search({ player => $player, exercise => $exercise });
 	my $base = $answers->search({ player => $player, exercise => $base });
@@ -96,6 +102,10 @@ for my $player ( keys %members ) {
 		$report->{points}->{$player}->{post_test}->{correct} = "??";
 		$report->{points}->{$player}->{post_test}->{targeted} = $targeted;
 		$report->{points}->{$player}->{post_test}->{improvement} = "??";
+		$class_total->{pre_test}->{attempted} += $pre_total;
+		$class_total->{pre_test}->{correct} += $pre_correct;
+		$class_total->{post_test}->{targeted} += $targeted;
+		$participants++;
 	}
 	else {
 		$report->{points}->{$player}->{answers} = 0;
@@ -121,18 +131,22 @@ STDOUT->autoflush;
 $^L='';
 
 format STDOUT_TOP =
-  Player     Question Grammatical Answers   Total     Grade
+             Pre-test               Post-test
+  Player     Attempted Correct   Targeted Attempted Correct Improvement   Grade
 .
 
 for my $member (sort keys %members) {
 
 format STDOUT =
-@<@<<<<<<<<<< @###      @##       @##       @##       @##
-{ "  ", $member, $report->{points}->{$member}->{try}
-    , $report->{points}->{$member}->{question}
-    , $report->{points}->{$member}->{answer}
-    , $card->{$member}
-    , $report->{grade}->{$member}
+@<@<<<<<<<<<< @###      @##       @##       @<<<<<    @<<<<     @<<<<     @<<
+{ "  ", $member
+		, $report->{points}->{$member}->{pre_test}->{attempted}
+		, $report->{points}->{$member}->{pre_test}->{correct}
+		, $report->{points}->{$member}->{post_test}->{targeted}
+		, $report->{points}->{$member}->{post_test}->{attempted}
+		, $report->{points}->{$member}->{post_test}->{correct}
+		, $report->{points}->{$member}->{post_test}->{improvement}
+		, "??"
     }
 .
 
@@ -145,18 +159,20 @@ $^L="\f";
 
 format TOTAL_TOP =
   Class Totals
-             Question Grammatical Answers   Total     Grade
+             Pre-test               Post-test
+             Attempted Correct   Targeted Attempted Correct Improvement   Grade
 .
 
 format TOTAL =
   Class Totals
-             Question Grammatical Answers   Total     Grade
-@<@<<<<<<<<<< @###      @####     @####     @####     @##
-{ "", "", $total->{question}
-    , $total->{grammatical}
-    , $total->{answer}
-    , $total->{total}
-    , $total->{grade}
+             Pre-test               Post-test
+             Attempted Correct   Targeted Attempted Correct Improvement   Grade
+@<@<<<<<<<<<< @###      @####     @####     @<<<<     @<<<<    @<<<<
+{ "", "",
+	, $class_total->{pre_test}->{attempted} / $participants
+	, $class_total->{pre_test}->{correct} / $participants
+	, $class_total->{post_test}->{targeted} / $participants
+	, "??", "??", "??"
     }
 .
 write;
