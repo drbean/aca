@@ -98,8 +98,8 @@ for my $player ( keys %members ) {
 		}
 		$report->{points}->{$player}->{pre_test}->{attempted} = $pre_total;
 		$report->{points}->{$player}->{pre_test}->{correct} = $pre_correct;
-		$report->{points}->{$player}->{post_test}->{attempted} = "<= $targeted";
-		$report->{points}->{$player}->{post_test}->{correct} = "??";
+		$report->{points}->{$player}->{post_test}->{attempted} = "$targeted?";
+		$report->{points}->{$player}->{post_test}->{correct} = "<$targeted";
 		$report->{points}->{$player}->{post_test}->{targeted} = $targeted;
 		$report->{points}->{$player}->{post_test}->{improvement} = "??";
 		$class_total->{pre_test}->{attempted} += $pre_total;
