@@ -60,7 +60,7 @@ my $words = $schema->resultset("Word")->search({
 my $wc = $words->count;
 my $answers = $schema->resultset("Play")->search({
 		league => $id });
-my $score_spread = 0;
+my $score_spread = 1;
 my $participants = 0;
 my $class_total = { pre_test => { attempted => 0, correct => 0 }
 			, post_test => {
