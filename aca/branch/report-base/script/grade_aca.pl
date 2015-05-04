@@ -29,7 +29,7 @@ has 'exercise' => (
     traits => ['Getopt'], is => 'ro', isa => 'Str', required => 0,
     cmd_aliases => 'x',);
 has 'base' => (
-    traits => ['Getopt'], is => 'ro', isa => 'Int', required => 0,
+    traits => ['Getopt'], is => 'ro', isa => 'Str', required => 0,
     cmd_aliases => 'b',);
 
 package main;
