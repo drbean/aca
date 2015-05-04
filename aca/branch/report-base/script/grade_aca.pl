@@ -108,8 +108,12 @@ for my $player ( keys %members ) {
 		$participants++;
 	}
 	else {
-		$report->{points}->{$player}->{answers} = 0;
-		$report->{points}->{$player}->{correct} = 0;
+		$report->{points}->{$player}->{pre_test}->{attempted} = 0;
+		$report->{points}->{$player}->{pre_test}->{correct} = 0;
+		$report->{points}->{$player}->{post_test}->{attempted} = $wc;
+		$report->{points}->{$player}->{post_test}->{correct} = 0;
+		$report->{points}->{$player}->{post_test}->{targeted} = 0;
+		$report->{points}->{$player}->{post_test}->{improvement} = 0;
 	}
 	$score_spread = $report->{points}->{$player}->{post_test}->{improvement} if
 		$report->{points}->{$player}->{post_test}->{improvement} > $score_spread;
