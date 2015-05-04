@@ -28,15 +28,9 @@ has 'league' => (
 has 'exercise' => (
     traits => ['Getopt'], is => 'ro', isa => 'Str', required => 0,
     cmd_aliases => 'x',);
-has 'quitter' => (
-    traits => ['Getopt'], is => 'ro', isa => 'Int', required => 0,
-    cmd_aliases => 'q',);
-has 'loser' => (
-    traits => ['Getopt'], is => 'ro', isa => 'Int', required => 0,
-    cmd_aliases => 'o',);
-has 'winner' => (
-    traits => ['Getopt'], is => 'ro', isa => 'Int', required => 0,
-    cmd_aliases => 'w',);
+has 'base' => (
+    traits => ['Getopt'], is => 'ro', isa => 'Str', required => 0,
+    cmd_aliases => 'b',);
 
 package main;
 
@@ -47,6 +41,7 @@ my $schema = Aca::Schema->connect( $connect_info );
 my $script = Script->new_with_options;
 my $id = $script->league;
 my $exercise = $script->exercise;
+my $base = $script->base;
 my $man = $script->man;
 my $help = $script->help;
 
@@ -61,13 +56,20 @@ my %members = map { $_->{id} => $_ } @$members;
 my ($report, $card);
 $report->{exercise} = $exercise;
 my $words = $schema->resultset("Word")->search({
-		exercise => "cooking" });
+		exercise => $base });
+my $wc = $words->count;
 my $answers = $schema->resultset("Play")->search({
 		league => $id });
-my $score_spread = 0;
+my $score_spread = 1;
+my $participants = 0;
+my $class_total = { pre_test => { attempted => 0, correct => 0 }
+			, post_test => {
+				attempted => 0, correct => 0, targeted => 0, improvement => 0 }
+			, average_grade => 0
+		};
 for my $player ( keys %members ) {
 	my $standing = $answers->search({ player => $player, exercise => $exercise });
-	my $base = $answers->search({ player => $player, exercise => 'cooking' });
+	my $base = $answers->search({ player => $player, exercise => $base });
 	my $improvement;
 	if ( $standing and $standing != 0 ) {
 		my $post_total = $standing->count;
@@ -100,10 +102,18 @@ for my $player ( keys %members ) {
 		$report->{points}->{$player}->{post_test}->{correct} = $post_correct;
 		$report->{points}->{$player}->{post_test}->{targeted} = $targeted;
 		$report->{points}->{$player}->{post_test}->{improvement} =$improvement;
+		$class_total->{pre_test}->{attempted} += $pre_total;
+		$class_total->{pre_test}->{correct} += $pre_correct;
+		$class_total->{post_test}->{targeted} += $targeted;
+		$participants++;
 	}
 	else {
-		$report->{points}->{$player}->{answers} = 0;
-		$report->{points}->{$player}->{correct} = 0;
+		$report->{points}->{$player}->{pre_test}->{attempted} = 0;
+		$report->{points}->{$player}->{pre_test}->{correct} = 0;
+		$report->{points}->{$player}->{post_test}->{attempted} = $wc;
+		$report->{points}->{$player}->{post_test}->{correct} = 0;
+		$report->{points}->{$player}->{post_test}->{targeted} = 0;
+		$report->{points}->{$player}->{post_test}->{improvement} = 0;
 	}
 	$score_spread = $report->{points}->{$player}->{post_test}->{improvement} if
 		$report->{points}->{$player}->{post_test}->{improvement} > $score_spread;
@@ -123,6 +133,61 @@ for my $player ( keys %members ) {
 }
 
 print Dump $report, $report->{grade};
+
+print "report: |+\n";
+
+STDOUT->autoflush;
+$^L='';
+
+format STDOUT_TOP =
+             Pre-test               Post-test
+  Player     Attempted Correct   Targeted Attempted Correct Improvement   Grade
+.
+
+for my $member (sort keys %members) {
+
+format STDOUT =
+@<@<<<<<<<<<< @###      @##       @##       @<<<<<    @<<<<     @<<<<     @<<
+{ "  ", $member
+		, $report->{points}->{$member}->{pre_test}->{attempted}
+		, $report->{points}->{$member}->{pre_test}->{correct}
+		, $report->{points}->{$member}->{post_test}->{targeted}
+		, $report->{points}->{$member}->{post_test}->{attempted}
+		, $report->{points}->{$member}->{post_test}->{correct}
+		, $report->{points}->{$member}->{post_test}->{improvement}
+		, "??"
+    }
+.
+
+    write;
+}
+
+$^='TOTAL_TOP';
+$~='TOTAL';
+$^L="\f";
+
+format TOTAL_TOP =
+  Class Totals
+             Pre-test               Post-test
+             Attempted Correct   Targeted Attempted Correct Improvement   Grade
+.
+
+format TOTAL =
+  Class Totals
+             Pre-test               Post-test
+             Attempted Correct   Targeted Attempted Correct Improvement   Grade
+@<@<<<<<<<<<< @###      @####     @####     @<<<<     @<<<<    @<<<<
+{ "", "",
+	, $class_total->{pre_test}->{attempted} / $participants
+	, $class_total->{pre_test}->{correct} / $participants
+	, $class_total->{post_test}->{targeted} / $participants
+	, "??", "??", "??"
+    }
+.
+write;
+
+print Dump $report->{grade};
+
 
 =head1 NAME
 
