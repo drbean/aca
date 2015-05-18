@@ -47,7 +47,7 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 		->search({ player => $player,
 		exercise => $exercise,
 		league => $league });
-	my $base = "cooking";
+	my $base = "travel";
 	my $word_bank = $c->model("DB::Word")
 		->search({ exercise => $base });
 	my $play = $c->model("DB::Play")
