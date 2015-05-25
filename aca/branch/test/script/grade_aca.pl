@@ -65,7 +65,7 @@ my $participants = 0;
 my $class_total = { pre_test => { attempted => 0, correct => 0 }
 			, post_test => {
 				attempted => 0, correct => 0, targeted => 0, improvement => 0 }
-			, average_grade => 0
+			, grade => 0
 		};
 for my $player ( keys %members ) {
 	my $standing = $answers->search({ player => $player, exercise => $exercise });
@@ -104,13 +104,16 @@ for my $player ( keys %members ) {
 		$report->{points}->{$player}->{post_test}->{improvement} =$improvement;
 		$class_total->{pre_test}->{attempted} += $pre_total;
 		$class_total->{pre_test}->{correct} += $pre_correct;
+		$class_total->{post_test}->{attempted} += $post_total;
+		$class_total->{post_test}->{correct} += $post_correct;
 		$class_total->{post_test}->{targeted} += $targeted;
+		$class_total->{post_test}->{improvement} +=$improvement;
 		$participants++;
 	}
 	else {
 		$report->{points}->{$player}->{pre_test}->{attempted} = 0;
 		$report->{points}->{$player}->{pre_test}->{correct} = 0;
-		$report->{points}->{$player}->{post_test}->{attempted} = $wc;
+		$report->{points}->{$player}->{post_test}->{attempted} = 0;
 		$report->{points}->{$player}->{post_test}->{correct} = 0;
 		$report->{points}->{$player}->{post_test}->{targeted} = 0;
 		$report->{points}->{$player}->{post_test}->{improvement} = 0;
@@ -123,7 +126,8 @@ for my $player ( keys %members ) {
 	$report->{exercise} = $exercise;
 	if ( $report->{points}->{$player}->{post_test}->{attempted} ) {
 		$report->{grade}->{$player} = sprintf( "%.2f", 3 + 2 *
-			$report->{points}->{$player}->{post_test}->{improvement} / $score_spread )
+			$report->{points}->{$player}->{post_test}->{improvement} / $score_spread );
+		$class_total->{grade} += $report->{grade}->{$player};
 	}
 	else {
 		$report->{grade}->{$player} = 0;
@@ -155,7 +159,7 @@ format STDOUT =
 		, $report->{points}->{$member}->{post_test}->{attempted}
 		, $report->{points}->{$member}->{post_test}->{correct}
 		, $report->{points}->{$member}->{post_test}->{improvement}
-		, "??"
+		, $report->{grade}->{$member}
     }
 .
 
@@ -176,12 +180,15 @@ format TOTAL =
   Class Totals
              Pre-test               Post-test
              Attempted Correct   Targeted Attempted Correct Improvement   Grade
-@<@<<<<<<<<<< @###      @####     @####     @<<<<     @<<<<    @<<<<
+@<@<<<<<<<<<< @###      @####     @####     @<<<<     @<<<<    @<<<<   @<<<<
 { "", "",
 	, $class_total->{pre_test}->{attempted} / $participants
 	, $class_total->{pre_test}->{correct} / $participants
 	, $class_total->{post_test}->{targeted} / $participants
-	, "??", "??", "??"
+	, $class_total->{post_test}->{attempted} / $participants
+	, $class_total->{post_test}->{correct} / $participants
+	, $class_total->{post_test}->{improvement} / $participants
+	, $class_total->{grade} / $participants
     }
 .
 write;
