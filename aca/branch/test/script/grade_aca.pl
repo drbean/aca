@@ -8,7 +8,7 @@ use Pod::Usage;
 
 use Config::General;
 use YAML qw/Bless Dump LoadFile/;
-use List::Util qw/reduce/;
+use List::Util qw/reduce max/;
 use Moose::Autobox;
 use Aca::Model::DB;
 use Aca::Schema;
@@ -108,6 +108,7 @@ for my $player ( keys %members ) {
 		$class_total->{post_test}->{correct} += $post_correct;
 		$class_total->{post_test}->{targeted} += $targeted;
 		$class_total->{post_test}->{improvement} +=$improvement;
+		$card->{$player} = $improvement;
 		$participants++;
 	}
 	else {
@@ -117,16 +118,27 @@ for my $player ( keys %members ) {
 		$report->{points}->{$player}->{post_test}->{correct} = 0;
 		$report->{points}->{$player}->{post_test}->{targeted} = 0;
 		$report->{points}->{$player}->{post_test}->{improvement} = 0;
+		$card->{$player} = 0;
 	}
 	$score_spread = $report->{points}->{$player}->{post_test}->{improvement} if
 		$report->{points}->{$player}->{post_test}->{improvement} > $score_spread;
 }
 
+my $median = (sort grep {$_ != 0} values %$card)[ $participants/2 ];
+my $max_points = max values %$card;
+
 for my $player ( keys %members ) {
 	$report->{exercise} = $exercise;
 	if ( $report->{points}->{$player}->{post_test}->{attempted} ) {
-		$report->{grade}->{$player} = sprintf( "%.2f", 3 + 2 *
-			$report->{points}->{$player}->{post_test}->{improvement} / $score_spread );
+		if ( $card->{$player} > $median ) {
+			$report->{grade}->{$player} =  sprintf( "%.2f", 4 + 1 * ($card->{$player} - $median) / ($max_points - $median) );
+		}
+		elsif ( $card->{$player} <= $median ) {
+			$report->{grade}->{$player} = sprintf( "%.2f", 3 + 1 * $card->{$player} / $median );
+		}
+		else {
+			die "No card.player, no report.grade.player?\n";
+		}
 		$class_total->{grade} += $report->{grade}->{$player};
 	}
 	else {
