@@ -39,8 +39,8 @@ sub grade :Path :Args(0) {
 	my ( $self, $c ) = @_;
 	my $id = $c->session->{player_id};
 	my $league   = $c->session->{league};
-	my $base = "cooking";
-	my $exercise = "cooking-test";
+	my $base = "travel";
+	my $exercise = "travel-test";
 	my $words = $c->model("DB::Word")->search({
 		exercise => $base});
 	my $base_play = $c->model("DB::Play")->search({
