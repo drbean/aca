@@ -21,6 +21,9 @@ has 'help' => ( is => 'ro', isa => 'Bool' );
 has 'id' => (
     traits => ['Getopt'], is => 'ro', isa => 'Str', required => 0,
     cmd_aliases => 'i',);
+has 'base' => (
+    traits => ['Getopt'], is => 'ro', isa => 'Str', required => 0,
+    cmd_aliases => 'b',);
 has 'genre' => (
     traits => ['Getopt'], is => 'ro', isa => 'Str', required => 0,
     cmd_aliases => 'g',);
@@ -36,6 +39,7 @@ my $id = $script->id;
 if ( not $id ) {
 	$id = shift @ARGV;
 }
+my $base = $script->base;
 my $genre = $script->genre;
 my $man = $script->man;
 my $help = $script->help;
@@ -44,13 +48,15 @@ pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
 my $class;
+
+$class = $schema->resultset('Word')->search(
+{ exercise => $base})->delete;
+
 if ( not $genre ) {
 	$class = $schema->resultset('Exercise')->search(
 	{ id => $id})->first->delete;
 }
 else {
-	$class = $schema->resultset('Word')->search(
-	{ exercise => $id})->delete;
 	$class = $schema->resultset('Exercise')->find(
 	{ genre => $genre, id => $id})->delete;
 }
