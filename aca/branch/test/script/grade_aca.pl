@@ -109,7 +109,7 @@ for my $player ( keys %members ) {
 		$class_total->{post_test}->{targeted} += $targeted;
 		$class_total->{post_test}->{improvement} +=$improvement;
 		$card->{$player} = $improvement;
-		$participants++;
+		$participants++ if $targeted;
 	}
 	else {
 		$report->{points}->{$player}->{pre_test}->{attempted} = 0;
@@ -124,7 +124,7 @@ for my $player ( keys %members ) {
 		$report->{points}->{$player}->{post_test}->{improvement} > $score_spread;
 }
 
-my $median = (sort grep {$_ != 0} values %$card)[ $participants/2 ];
+my $median = (sort {$a<=>$b} grep {$_ != 0} values %$card)[ $participants/2 ];
 my $max_points = max values %$card;
 
 for my $player ( keys %members ) {
