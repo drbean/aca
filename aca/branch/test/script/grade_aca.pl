@@ -156,7 +156,7 @@ STDOUT->autoflush;
 $^L='';
 
 format STDOUT_TOP =
-             Pre-test               Post-test
+  Stages     Pre-test               Post-test
   Player     Attempted Correct   Targeted Attempted Correct Improvement   Grade
 .
 
