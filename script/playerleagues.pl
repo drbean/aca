@@ -19,14 +19,7 @@ my $schema = Aca::Schema->connect( $connect_info );
 
 my $leaguegenres = [
 			[ qw/league genre/ ],
-			[ "FLA0022",	"business" ],
-			[ "FLA0026",	"tech" ],
-			[ "FLA0027",	"presentation" ],
-			[ "FLA0015",	"conversation" ],
-			[ "FLA0017",	"conversation" ],
-			[ "AFB1J0",	"call" ],
-			[ "2L2",	"speaking" ],
-			[ "MB2",	"speaking" ],
+			[ "FLA0021",	"tech" ],
 		];
 
 my @leagueids = map $_->[0], @$leaguegenres[1..$#$leaguegenres];
