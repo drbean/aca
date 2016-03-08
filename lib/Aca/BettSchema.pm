@@ -9,7 +9,7 @@ use lib "$Bin/../../../bett/lib";
 use base 'DBIx::Class::Schema';
 
 __PACKAGE__->load_namespaces(
-	result_namespace => '+Dic::Schema'
+	result_namespace => '+Bett::Schema'
 	);
 
 
