@@ -1,10 +1,10 @@
-package Aca::dicSchema;
+package Aca::BettSchema;
 
 use strict;
 use warnings;
 use FindBin qw/$Bin/;
 
-use lib "$Bin/../../dic/lib";
+use lib "$Bin/../../../bett/lib";
 
 use base 'DBIx::Class::Schema';
 
