@@ -19,7 +19,7 @@ my $schema = Aca::Schema->connect( $connect_info );
 
 my $leaguegenres = [
 			[ qw/league genre/ ],
-			[ "FLA0021",	"tech" ],
+			[ "FLA0021",	9],
 		];
 
 my @leagueids = map $_->[0], @$leaguegenres[1..$#$leaguegenres];
@@ -36,17 +36,18 @@ for my $league ( @leagueids ) {
 
 uptodatepopulate( 'League', $leagues );
 
-#uptodatepopulate( 'Genre', [
-#			[ qw/id value/ ],
-#			[ 1, "conversation" ],
-#			[ 2, "business" ],
-#			[ 3, "friends" ],
-#			[ 4, "intercultural" ],
-#			[ 5, "speaking" ],
-#			[ 6, "pop" ],
-#			[ 7, "media" ],
-#			[ 8, "multimedia" ],
-#			] );
+uptodatepopulate( 'Genre', [
+			[ qw/id value/ ],
+			[ 1, "conversation" ],
+			[ 2, "business" ],
+			[ 3, "writing" ],
+			[ 4, "correspondence" ],
+			[ 5, "speaking" ],
+			[ 6, "pop" ],
+			[ 7, "media" ],
+			[ 8, "call" ],
+			[ 9, "tech" ],
+			] );
 
 uptodatepopulate( 'Leaguegenre', $leaguegenres );
 
@@ -78,9 +79,9 @@ foreach my $league ( @leagueids )
 		$members{$player->[0]} =  [ $league, $player->[0] ];
 		$rolebearers{$player->[0]} =  [ $player->[0], 2 ];
 	}
+	$members{193001} = [ $league, 193001 ];
 	push @allLeaguePlayers, values %members;
 	push @allLeaguerolebearers, values %rolebearers;
-	$members{193001} = [ $league, 193001 ];
 }
 uptodatepopulate( 'Member', [ [ qw/league player/ ], 
 				@allLeaguePlayers ] );
