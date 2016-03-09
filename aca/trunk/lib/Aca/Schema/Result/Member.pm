@@ -1,4 +1,4 @@
-package Bett::Schema::Result::Member;
+package Aca::Schema::Result::Member;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
@@ -15,7 +15,7 @@ __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 
 =head1 NAME
 
-Bett::Schema::Result::Member
+Aca::Schema::Result::Member
 
 =cut
 
@@ -51,13 +51,13 @@ __PACKAGE__->set_primary_key("player", "league");
 
 Type: belongs_to
 
-Related object: L<Bett::Schema::Result::Player>
+Related object: L<Aca::Schema::Result::Player>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "player",
-  "Bett::Schema::Result::Player",
+  "Aca::Schema::Result::Player",
   { id => "player" },
   { is_deferrable => 0, on_delete => "CASCADE", on_update => "CASCADE" },
 );
@@ -66,13 +66,13 @@ __PACKAGE__->belongs_to(
 
 Type: belongs_to
 
-Related object: L<Bett::Schema::Result::League>
+Related object: L<Aca::Schema::Result::League>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "league",
-  "Bett::Schema::Result::League",
+  "Aca::Schema::Result::League",
   { id => "league" },
   { is_deferrable => 0, on_delete => "CASCADE", on_update => "CASCADE" },
 );
@@ -81,13 +81,13 @@ __PACKAGE__->belongs_to(
 #
 #Type: has_many
 #
-#Related object: L<Bett::Schema::Result::Question>
+#Related object: L<Aca::Schema::Result::Question>
 #
 #=cut
 #
 #__PACKAGE__->has_many(
 #  "questions",
-#  "Bett::Schema::Result::Question",
+#  "Aca::Schema::Result::Question",
 #  {	"foreign.player" => "self.player",
 #  	"foreign.league" => "self.league"
 #  },
@@ -98,13 +98,13 @@ __PACKAGE__->belongs_to(
 
 Type: has_many
 
-Related object: L<Bett::Schema::Result::Play>
+Related object: L<Aca::Schema::Result::Play>
 
 =cut
 
 __PACKAGE__->has_many(
   "plays",
-  "Bett::Schema::Result::Play",
+  "Aca::Schema::Result::Play",
   { "foreign.player" => "self.player" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
