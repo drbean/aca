@@ -51,7 +51,7 @@ sub index : Path : Args(0) {
 				return;
 			}
 			my @memberships =
-			  $c->model("BettDB::Member")->search( { player => $id } );
+			  $c->model("DB::Member")->search( { player => $id } );
 			my @leagues;
 			my $exercise = $c->session->{exercise} || $c->request->query_params
 					->{exercise};
@@ -60,7 +60,7 @@ sub index : Path : Args(0) {
 			$c->session->{genre} = $genre;
 			for my $membership (@memberships) {
 				push @leagues, $membership->league if
-					$membership->league->genre->genre eq $genre;
+					$membership->league->leaguegenres->genre->value eq $genre;
 			}
 			if ( @leagues > 1 ) {
 				$c->stash->{id}	   = $id;
