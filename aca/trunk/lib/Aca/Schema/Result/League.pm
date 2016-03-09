@@ -1,4 +1,4 @@
-package Bett::Schema::Result::League;
+package Aca::Schema::Result::League;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
@@ -15,7 +15,7 @@ __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 
 =head1 NAME
 
-Bett::Schema::Result::League
+Aca::Schema::Result::League
 
 =cut
 
@@ -63,13 +63,13 @@ __PACKAGE__->set_primary_key("id");
 
 Type: has_many
 
-Related object: L<Bett::Schema::Result::Member>
+Related object: L<Aca::Schema::Result::Member>
 
 =cut
 
 __PACKAGE__->has_many(
   "members",
-  "Bett::Schema::Result::Member",
+  "Aca::Schema::Result::Member",
   { "foreign.league" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -78,13 +78,13 @@ __PACKAGE__->has_many(
 
 Type: belongs_to
 
-Related object: L<Bett::Schema::Result::Leaguegenre>
+Related object: L<Aca::Schema::Result::Leaguegenre>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "leaguegenres",
-  "Bett::Schema::Result::Leaguegenre",
+  "Aca::Schema::Result::Leaguegenre",
   { "foreign.league" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -97,7 +97,7 @@ __PACKAGE__->belongs_to(
 
 Type: many_many
 
-Related object: L<Bett::Schema::Result::Player>
+Related object: L<Aca::Schema::Result::Player>
 
 =cut
 
