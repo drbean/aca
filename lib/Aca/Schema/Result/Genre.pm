@@ -1,4 +1,4 @@
-package Bett::Schema::Result::Genre;
+package Aca::Schema::Result::Genre;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
@@ -15,7 +15,7 @@ __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 
 =head1 NAME
 
-Bett::Schema::Result::Genre
+Aca::Schema::Result::Genre
 
 =cut
 
@@ -50,13 +50,13 @@ __PACKAGE__->set_primary_key("id");
 
 Type: has_many
 
-Related object: L<Bett::Schema::Result::Leaguegenre>
+Related object: L<Aca::Schema::Result::Leaguegenre>
 
 =cut
 
 __PACKAGE__->has_many(
   "leaguegenres",
-  "Bett::Schema::Result::Leaguegenre",
+  "Aca::Schema::Result::Leaguegenre",
   { "foreign.genre" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -65,13 +65,13 @@ __PACKAGE__->has_many(
 
 Type: has_many
 
-Related object: L<Bett::Schema::Result::Question>
+Related object: L<Aca::Schema::Result::Question>
 
 =cut
 
 __PACKAGE__->has_many(
   "questions",
-  "Bett::Schema::Result::Question",
+  "Aca::Schema::Result::Question",
   { "foreign.genre" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
