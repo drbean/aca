@@ -1,4 +1,4 @@
-package Bett::Schema::Result::Leaguegenre;
+package Aca::Schema::Result::Leaguegenre;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
@@ -15,7 +15,7 @@ __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 
 =head1 NAME
 
-Bett::Schema::Result::Leaguegenre
+Aca::Schema::Result::Leaguegenre
 
 =cut
 
@@ -51,13 +51,13 @@ __PACKAGE__->set_primary_key("league");
 
 Type: belongs_to
 
-Related object: L<Bett::Schema::Result::Genre>
+Related object: L<Aca::Schema::Result::Genre>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "genre",
-  "Bett::Schema::Result::Genre",
+  "Aca::Schema::Result::Genre",
   { id => "genre" },
   { is_deferrable => 0, on_delete => "CASCADE", on_update => "CASCADE" },
 );
@@ -66,13 +66,13 @@ __PACKAGE__->belongs_to(
 
 Type: belongs_to
 
-Related object: L<Bett::Schema::Result::League>
+Related object: L<Aca::Schema::Result::League>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "league",
-  "Bett::Schema::Result::League",
+  "Aca::Schema::Result::League",
   { id => "league" },
   { is_deferrable => 0, on_delete => "CASCADE", on_update => "CASCADE" },
 );
