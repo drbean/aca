@@ -54,7 +54,7 @@ __PACKAGE__->config(
 __PACKAGE__->config->{'Plugin::Authentication'} = {
    default => {
        class           => 'SimpleDB',
-       user_model      => 'dicDB::Player',
+       user_model      => 'DB::Player',
        password_type   => 'clear',
    },
 };

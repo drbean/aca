@@ -2,7 +2,6 @@
 # you want to use YAML like in old versions of Catalyst
 name: Aca
 
-database: aca032
-dic_database: dic032
-leagues: /home/drbean/032
-
+database: aca042
+bett_database: bett042
+leagues: /home/drbean/042
