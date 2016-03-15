@@ -8,7 +8,7 @@ BEGIN {extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
-Bett::Controller::Play - Catalyst Controller
+Aca::Controller::Play - Catalyst Controller
 
 =head1 DESCRIPTION
 
