@@ -39,11 +39,11 @@ sub grade :Path :Args(0) {
 	my ( $self, $c ) = @_;
 	my $id = $c->session->{player_id};
 	my $league   = $c->session->{league};
-	my $exercise = "computing";
+	my $exercise = $c->session->{exercise};
 	my $words = $c->model("DB::Word")->search({
 		exercise =>  $exercise});
 	my $base = $c->model("DB::Play")->search({
-		league => $league, exercise => $exercise, player => $id });
+		league => $league, exercise => $exercise . "_base", player => $id });
 	my $word_total= $words->count;
 	my $pre_total= $base->count;
 	$words->reset;
@@ -55,7 +55,6 @@ sub grade :Path :Args(0) {
 		my $pre = $base->find({word => $head});
 		my $answer = $word->answer;
 		$answers{$head} = $answer;
-# $DB::single=1 if $head eq "vary";
 		if ( $pre and $pre->answer eq $answer ) {
 			$pre_correct++;
 			$right{$head} = "Right";
