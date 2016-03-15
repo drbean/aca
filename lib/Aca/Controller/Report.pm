@@ -102,6 +102,7 @@ sub ftp : Private {
     $ftp->login('greg', '');
     my $config = $c->config;
     my $leaguedirs = $config->{leagues};
+    my $league = $c->session->{league};
     my %leaguesByGenre;
     my @genres = qw/conversation business call esp tech friends customs media multimedia college literature       intercultural/;
     $leaguesByGenre{$_} = $config->{ $_ } for @genres;
@@ -110,7 +111,7 @@ sub ftp : Private {
     my $tourid = $c->stash->{league};
     my $genre = $leaguegenre{$tourid};
     $ftp->cwd("/public_html/tech/flash");
-    my $deck = "$leaguedirs/FLA0021/flash/$id.txt";
+    my $deck = "$leaguedirs/$league/flash/$id.txt";
     io($deck)->print
         ( $flash );
     $ftp->put($deck, "$id.txt");
