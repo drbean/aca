@@ -2,7 +2,7 @@
 
 <H1>Welcome, [% player %], to the vocabulary quiz for the [% exercise %] Exercise in the [% league %] league.</H1>
 
-<p>We have used Anki or Mnemosyne to learn 180 words. The difference between the number of words which you got wrong on the pre-test and which you get right now will be your grade for Exam 2 of the course.
+<p>We have used Anki or Memrise to learn 180 words. The difference between the number of words which you got wrong on the pre-test and which you get right now will be your grade for the exam in the "[% exercise %]" segment of the course.
 
 <ul>
 <li>Give a translation for every word. Save your work regularly by clicking 'Submit' and certainly click 'Submit' before closing your browser.
