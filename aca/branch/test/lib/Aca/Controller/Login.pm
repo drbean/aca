@@ -8,7 +8,7 @@ use parent 'Catalyst::Controller';
 
 =head1 NAME
 
-dic::Controller::Login - Catalyst Controller
+Bett::Controller::Login - Catalyst Controller
 
 =head1 DESCRIPTION
 
@@ -38,9 +38,9 @@ sub index : Path : Args(0) {
 			if ( $c->check_user_roles($officialrole) ) {
 				$c->stash->{id}   = $id;
 				$c->stash->{name} = $name;
-				my @leagues = $c->model('dicDB::League')->search({});
+				my @leagues = $c->model('BettDB::League')->search({});
 				$c->stash->{leagues} = \@leagues;
-				my $jigsawroles = $c->model('dicDB::Jigsawrole');
+				my $jigsawroles = $c->model('BettDB::Jigsawrole');
 				my $oldrole = $jigsawroles->search( { player => $id } )->next;
 				if ($oldrole) {
 					$c->stash->{oldrole} = $oldrole->role;
@@ -52,7 +52,7 @@ sub index : Path : Args(0) {
 			}
 $DB::single=1;
 			my @memberships =
-			  $c->model("dicDB::Member")->search( { player => $id } );
+			  $c->model("DB::Member")->search( { player => $id } );
 			my @leagues;
 			my $exercise = $c->session->{exercise} || $c->request->query_params
 					->{exercise};
@@ -60,8 +60,8 @@ $DB::single=1;
 				->first->genre;
 			$c->session->{genre} = $genre;
 			for my $membership (@memberships) {
-				push @leagues, $membership->league;  #if
-				#$membership->league->genre->genre eq $genre;
+				push @leagues, $membership->league if
+					$membership->league->leaguegenres->genre->value eq $genre;
 			}
 			if ( @leagues > 1 ) {
 				$c->stash->{id}	   = $id;
@@ -117,7 +117,7 @@ sub official : Local {
 		if ( $c->check_user_roles($officialrole) ) {
 			$c->session->{exercise} = $exercise if $exercise;
 			$c->session->{league} = $league;
-			$c->model('dicDB::Jigsawrole')->update_or_create(
+			$c->model('BettDB::Jigsawrole')->update_or_create(
 				{ league => $league, player => $username, role => $jigsawrole } )
 					if defined $jigsawrole;
 			$c->response->redirect($c->uri_for("/play/setup"), 303);
