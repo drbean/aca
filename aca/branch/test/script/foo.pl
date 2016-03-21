@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 03/21/2016 08:52:41 AM
-# Last Edit: 2016 Mar 21, 09:02:55 AM
+# Last Edit: 2016 Mar 21, 09:13:17 AM
 # $Id$
 
 =head1 NAME
@@ -50,13 +50,13 @@ Configuration directives
 =cut
 
 while (my $q = CGI::Fast->new) {
-print("Content-Type: text/plain\n\n");
-foreach $var (sort(keys(%ENV))) {
-$val = $ENV{$var};
-$val =~ s|\n|\\n|g;
-$val =~ s|"|\\"|g;
-print "${var}=\"${val}\"\n";
-}
+    print("Content-Type: text/plain\n\n");
+    foreach my $var (sort(keys(%ENV))) {
+	my $val = $ENV{$var};
+	$val =~ s|\n|\\n|g;
+	$val =~ s|"|\\"|g;
+	print "${var}=\"${val}\"\n";
+    }
 }
 
 
