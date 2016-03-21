@@ -57,7 +57,11 @@ sub grade :Path :Args(0) {
 		my $answer = $word->answer;
 		$answers{$head} = $answer;
 # $DB::single=1 if $head eq "vary";
-		if ( $pre and $pre->answer eq $answer ) {
+		if ( $pre_total == 0 ) {
+			$passed{$head} = "Unattempted";
+			$flash{$head} = $answer;
+		}
+		elsif ( $pre and $pre->answer eq $answer ) {
 			$pre_correct++;
 			$right{$head} = "Right";
 		}
