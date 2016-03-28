@@ -214,7 +214,7 @@ grade_aca.pl - record results from aca DB
 
 =head1 SYNOPSIS
 
-perl script_files/grade_aca.pl -l GL00016 -x sports-test > ../001/GL00016/exam/g.yaml
+perl script_files/grade_aca.pl -l GL00016 -x sports-test -b sports-base > ../001/GL00016/exam/g.yaml
 
 =cut
 
