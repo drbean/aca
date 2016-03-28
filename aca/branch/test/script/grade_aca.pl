@@ -41,7 +41,7 @@ my $schema = Aca::Schema->connect( $connect_info );
 my $script = Script->new_with_options;
 my $id = $script->league;
 my $exercise = $script->exercise;
-my $base = $script->base;
+my $base = $script->base or $exercise . "_base";
 my $man = $script->man;
 my $help = $script->help;
 
@@ -56,7 +56,7 @@ my %members = map { $_->{id} => $_ } @$members;
 my ($report, $card);
 $report->{exercise} = $exercise;
 my $words = $schema->resultset("Word")->search({
-		exercise => $base });
+		exercise => $exercise });
 my $wc = $words->count;
 my $answers = $schema->resultset("Play")->search({
 		league => $id });
