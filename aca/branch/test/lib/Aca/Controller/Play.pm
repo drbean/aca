@@ -128,6 +128,7 @@ sub update :Chained('try') :PathPart('') :CaptureArgs(0) {
 	my $in_play = $c->stash->{in_play};
 	my $words = $c->stash->{word};
 	my (%dupes, %values, %value_dupes, $error_msg);
+	$error_msg = $c->stash->{error_msg};
 	for ( keys %$in_play ) {
 		my $value = $in_play->{$_};
 		$values{$value}++ if $value;
