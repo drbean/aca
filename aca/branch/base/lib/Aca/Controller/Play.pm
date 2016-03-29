@@ -34,7 +34,7 @@ use List::MoreUtils qw/any/;
 
 =head2 setup
 
-Gameover if all answers defined.
+Gameover if 100 answers defined.
 
 =cut
 
@@ -49,7 +49,7 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 		league => $league });
 	my $word = $c->model("DB::Word")
 		->search({ exercise => $exercise });
-	if ( $standing->count >= ($word->count - 1) ) {
+	if ( $standing->count >= 100 ) {
 		$c->stash(gameover => 1);
 		$c->detach('exchange');
 	}
@@ -76,7 +76,9 @@ sub try :Chained('setup') :PathPart('') :CaptureArgs(0) {
 		delete $in_play->{course};
 		delete $in_play->{shift};
 		delete $in_play->{Submit};
+		my $quit = delete $in_play->{quit};
 		$c->stash({ in_play => $in_play });
+		$c->stash({ quit => $quit });
 		my @heads = keys %$in_play;
 		my $tries = $c->model('DB::Try')->search({
 			league => $c->stash->{league},
@@ -179,7 +181,7 @@ GAME OVER, or loop back to REPL.
 
 sub exchange :Chained('update') :PathPart('') :Args(0) {
 	my ( $self, $c ) = @_;
-	if ( $c->stash->{gameover} ) {
+	if ( $c->stash->{gameover} or $c->stash->{quit} ) {
 		$c->detach("Report", 'grade');
 		return;
 	}
