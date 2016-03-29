@@ -2,18 +2,23 @@
 
 <H1>Welcome, [% player %], to the vocabulary quiz for the [% exercise %] Exercise in the [% league %] league.</H1>
 
-<p>We are going to learn 180 words from sublists 1, 2, 3 of the <a href="http://www.victoria.ac.nz/lals/resources/academicwordlist/">Academic Word List</a>, as described on <a href="http://en.wikipedia.org/wiki/Academic_word_list">Wikipedia</a>. This will be your grade for Exam 2 of the course. Your score will be the number of words which you get wrong in this pre-test but which you get right in the exam.
+<p>We are going to learn some words from the lists of ALin, Brian, Mark, Anthony, Ivy, Ula, Sandy, Vivi, Vicky, Sally, Nora, Sunny on elearning. This will be your grade for Exam 2 of the course. Your score will be the number of words which you get wrong in this pre-test but which you get right in the exam.
 
-<p>First we need to establish a base level. How many of these words do you know? Take a couple of days, but write down a Chinese translation for each of the 180 words. DON'T use a dictionary. If you don't know the word, guess. Getting many translations correct here will hurt you, rather than help you.
+There are 170 words in total, but you can write translations here for as many words as you like, up to a maximum of 100. The words in Exam 2 will be the words you get wrong here.
+
+<p>So we need to establish a base level here. How many of these words do you know? Take a couple of days, but write down a Chinese translation for as many words as you like, up to a total of 100. The more you try, the more chances you have of getting words wrong and the greater your score in the exam. DON'T use a dictionary. If you don't know the word, guess. Getting many translations correct here will hurt you, rather than help you.
 
 <ul>
-<li>You must give a translation for every word. Take a couple of days. But save your work regularly by clicking 'Submit' and certainly click 'Submit' before closing your browser.
+<li>You don't have to give a translation for every word. Take a couple of days. But save your work regularly by clicking 'Submit' and certainly click 'Submit' before closing your browser.
 <li>Every translation must be different. Guessing is good, but they must be different guesses for each word.
+<li>When you think you have done enough words to give you a good number of words to study for the exam, you can check the Enough button for GAME OVER before clicking Submit.
 </ul>
 
 <FORM method="post" action="[% c.uri_for('/play', course) %]">
 <INPUT type="hidden" name="course" value="[% course %]">
 <INPUT type="submit" name="Submit" value="Submit">
+<P>
+<INPUT type="checkbox" name="quit" value="quit">ENOUGH: I have enough words
 <TABLE>
 <TR>
 <TD>[% progress %] <TD>translation(s) finished.
