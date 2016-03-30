@@ -45,11 +45,14 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 	my $exercise = $c->session->{exercise};
 	my $standing = $c->model("DB::Play")
 		->search({ player => $player,
-		exercise => $exercise,
+		exercise => $exercise . "_base",
 		league => $league });
 	my $word = $c->model("DB::Word")
 		->search({ exercise => $exercise });
-	if ( $standing->count >= 100 ) {
+	if ( $standing->count > 100 ) {
+		$c->detach("Delete", 'delete');
+	}
+	elsif ( $standing->count >= 100 ) {
 		$c->stash(gameover => 1);
 		$c->detach('exchange');
 	}
@@ -82,7 +85,7 @@ sub try :Chained('setup') :PathPart('') :CaptureArgs(0) {
 		my @heads = keys %$in_play;
 		my $tries = $c->model('DB::Try')->search({
 			league => $c->stash->{league},
-			exercise => $c->stash->{exercise},
+			exercise => $c->stash->{exercise} . "_base",
 			player => $c->stash->{player},
 			});
 		my $last_try = $tries->get_column('try')->max() + 1;
