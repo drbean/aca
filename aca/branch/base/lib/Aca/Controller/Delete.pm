@@ -31,12 +31,12 @@ sub index :Path :Args(0) {
 
 
 
-=head2 grade
+=head2 choose
 
 =cut
 
-sub delete :Path :Args(0) {
-	my ( $self, $c ) = @_;
+sub choose :Path :Args(1) {
+	my ($self, $c, $mycourse) = @_;
 	my $id = $c->session->{player_id};
 	my $league   = $c->session->{league};
 	my $exercise = $c->session->{exercise};
@@ -44,78 +44,60 @@ sub delete :Path :Args(0) {
 		exercise =>  $exercise});
 	my $base = $c->model("DB::Play")->search({
 		league => $league, exercise => $exercise . "_base", player => $id });
-	my $word_total= $words->count;
-	my $pre_total= $base->count;
-	$words->reset;
-	my $pre_correct = 0;
-	my (%answers, %wrong, %flash, %right, %passed);
-	while ( my $word = $words->next ) {
-		my $head = $word->head;
-		next if $head eq 'shift';
-		my $pre = $base->find({word => $head});
-		my $answer = $word->answer;
-		$answers{$head} = $answer;
-# $DB::single=1 if $head eq "vary";
-		if ( $pre and $pre->answer eq $answer ) {
-			$pre_correct++;
-			$right{$head} = "Right";
-		}
-		elsif ( $pre ) {
-			$wrong{$head} = $pre->answer;
-			$flash{$head} = $answer;
-		}
-		else {
-			$passed{$head} = "Unattempted";
-		}
-
+	my $pre_total = $base->count;
+	my %attempted;
+	while (my $one = $base->next ) {
+		$attempted{$one->word} = $one->answer;
 	}
-	$words->reset;
-	my $pre_incorrect = $pre_total - $pre_correct;
-	my $unattempted = $word_total - $pre_total - 1;
 	$c->stash->{player}   = $id;
 	$c->stash->{exercise}   = $exercise;
 	$c->stash->{league}   = $league;
-	$c->stash->{answers}   = \%answers;
-	$c->stash->{wrong}   = \%wrong;
-	$c->stash->{right}   = \%right;
-	$c->stash->{passed}   = \%passed;
+	$c->stash->{limit}   = $c->config->{limit};
 	$c->stash->{pre_total}   = $pre_total;
-	$c->stash->{pre_correct}   = $pre_correct;
-	$c->stash->{pre_incorrect}   = $pre_incorrect;
-	$c->stash->{unattempted}   = $unattempted;
-	$c->stash->{template}	= "grade.tt2";
-	my $flash; $flash .= "$_\t$flash{$_}\n" for sort keys %flash;
-	$c->forward('ftp', [$flash, $id]);
+	$c->stash->{attempted}   = \%attempted;
+	$c->stash->{words}  = $words;
+	$c->stash(course => $mycourse);
+	$c->stash->{template}	= "delete.tt2";
 }
 
-=head2 ftp
-
-    $self->forward('ftp')
-
-Private method used by report action to put flashcards on http://web.nuu.edu.tw/~greg/tech/$player.txt
-
-=cut
-
-sub ftp : Private {
-    my ($self, $c, $flash, $id) = @_;
-    my $ftp = Net::FTP->new('web.nuu.edu.tw');
-    $ftp->login('greg', '');
-    my $config = $c->config;
-    my $leaguedirs = $config->{leagues};
-    my %leaguesByGenre;
-    my @genres = qw/conversation business call esp tech friends customs media multimedia college literature       intercultural/;
-    $leaguesByGenre{$_} = $config->{ $_ } for @genres;
-    my %leaguegenre = map { my $genre = $_ ;  my $leagues = $leaguesByGenre{$genre};
-                        map { $_ => $genre } @$leagues } @genres;
-    my $tourid = $c->stash->{league};
-    my $genre = $leaguegenre{$tourid};
-    $ftp->cwd("/public_html/tech/flash");
-    my $deck = "$leaguedirs/FLA0021/flash/$id.txt";
-    io($deck)->print
-        ( $flash );
-    $ftp->put($deck, "$id.txt");
-	#$c->response->redirect
-    #    ("http://web.nuu.edu.tw/~greg/tech/flash/$id.txt");
+sub delete :Path :Args(1) {
+	my ($self, $c, $mycourse) = @_;
+	my $id = $c->session->{player_id};
+	my $league   = $c->session->{league};
+	my $exercise = $c->session->{exercise};
+	my $words = $c->model("DB::Word")->search({
+		exercise =>  $exercise});
+	my $base = $c->model("DB::Play")->search({
+		league => $league, exercise => $exercise . "_base", player => $id });
+	my $limit = $c->config->{limit};
+	my $pre_total = $base->count;
+	$base->reset;
+	$c->stash({limit => $limit});
+	my $removable = $c->request->params;
+	delete $removable->{course};
+	delete $removable->{shift};
+	delete $removable->{Submit};
+	my $quit = delete $removable->{quit};
+	for my $word ( keys %$removable )  {
+		$base->search({ word => $word })->delete;
+	}
+	my %revised;
+	while (my $one = $base->next ) {
+		$revised{$one->word} = $one->answer;
+	}
+	$c->stash->{player}   = $id;
+	$c->stash->{exercise}   = $exercise;
+	$c->stash->{league}   = $league;
+	$c->stash->{pre_total}   = $pre_total;
+	$c->stash->{attempted}   = \%revised;
+	$c->stash->{words}  = $words;
+	$c->stash(course => $mycourse);
+	if ( $base->count > $limit ) {
+		$c->stash->{template}	= "delete.tt2";
+	}
+	else {
+		$c->detach("Play", 'setup');
+	}
 }
 
 =encoding utf8
