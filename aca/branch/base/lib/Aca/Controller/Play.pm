@@ -49,16 +49,18 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 		league => $league });
 	my $word = $c->model("DB::Word")
 		->search({ exercise => $exercise });
-	if ( $standing->count > 100 ) {
-		$c->detach("Delete", 'delete');
+	my $limit = $c->config->{limit};
+	$c->stash({limit => $limit});
+	$c->stash(course => $mycourse);
+	if ( $standing->count > $limit ) {
+		$c->detach("Delete", 'choose');
 	}
-	elsif ( $standing->count >= 100 ) {
+	elsif ( $standing->count >= $limit ) {
 		$c->stash(gameover => 1);
 		$c->detach('exchange');
 	}
 	$c->stash(word => $word);
 	$c->stash(standing => $standing);
-	$c->stash(course => $mycourse);
 	$c->stash(player => $player);
 	$c->stash(exercise => $exercise);
 	$c->stash(league => $league);
