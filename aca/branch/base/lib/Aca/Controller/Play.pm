@@ -55,10 +55,6 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 	if ( $standing->count > $limit ) {
 		$c->detach("Delete", 'choose');
 	}
-	elsif ( $standing->count >= $limit ) {
-		$c->stash(gameover => 1);
-		$c->detach('exchange');
-	}
 	$c->stash(word => $word);
 	$c->stash(standing => $standing);
 	$c->stash(player => $player);
