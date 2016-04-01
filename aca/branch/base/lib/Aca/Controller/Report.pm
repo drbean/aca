@@ -43,7 +43,7 @@ sub grade :Path :Args(0) {
 	my $words = $c->model("DB::Word")->search({
 		exercise =>  $exercise});
 	my $base = $c->model("DB::Play")->search({
-		league => $league, exercise => $exercise, player => $id });
+		league => $league, exercise => $exercise . "_base", player => $id });
 	my $word_total= $words->count;
 	my $pre_total= $base->count;
 	$words->reset;
