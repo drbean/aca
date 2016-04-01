@@ -6,7 +6,7 @@
 
 <H2>Words attempted: [% pre_total %]/[% words.count %]</H2>
 
-<FORM method="post" action="[% c.uri_for('/delete', course) %]">
+<FORM method="post" action="[% c.uri_for('/delete') %]">
 <INPUT type="hidden" name="course" value="[% course %]">
 <INPUT type="submit" name="Submit" value="Submit">
 <TABLE>

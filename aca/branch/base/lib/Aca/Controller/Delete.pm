@@ -35,8 +35,8 @@ sub index :Path :Args(0) {
 
 =cut
 
-sub choose :Path :Args(1) {
-	my ($self, $c, $mycourse) = @_;
+sub choose :Path :Args(0) {
+	my ($self, $c) = @_;
 	my $id = $c->session->{player_id};
 	my $league   = $c->session->{league};
 	my $exercise = $c->session->{exercise};
@@ -56,12 +56,11 @@ sub choose :Path :Args(1) {
 	$c->stash->{pre_total}   = $pre_total;
 	$c->stash->{attempted}   = \%attempted;
 	$c->stash->{words}  = $words;
-	$c->stash(course => $mycourse);
 	$c->stash->{template}	= "delete.tt2";
 }
 
-sub delete :Path :Args(1) {
-	my ($self, $c, $mycourse) = @_;
+sub delete :Path :Args(0) {
+	my ($self, $c) = @_;
 	my $id = $c->session->{player_id};
 	my $league   = $c->session->{league};
 	my $exercise = $c->session->{exercise};
@@ -74,7 +73,6 @@ sub delete :Path :Args(1) {
 	$base->reset;
 	$c->stash({limit => $limit});
 	my $removable = $c->request->params;
-	delete $removable->{course};
 	delete $removable->{shift};
 	delete $removable->{Submit};
 	my $quit = delete $removable->{quit};
@@ -91,7 +89,6 @@ sub delete :Path :Args(1) {
 	$c->stash->{pre_total}   = $pre_total;
 	$c->stash->{attempted}   = \%revised;
 	$c->stash->{words}  = $words;
-	$c->stash(course => $mycourse);
 	if ( $base->count > $limit ) {
 		$c->stash->{template}	= "delete.tt2";
 	}
