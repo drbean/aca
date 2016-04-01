@@ -186,12 +186,17 @@ sub exchange :Chained('update') :PathPart('') :Args(0) {
 		$c->detach("Report", 'grade');
 		return;
 	}
+	my $words = $c->stash->{word};
 	my $standing = $c->stash->{standing};
-	my $answers;
+	my ($heads, $answers);
 	$standing->reset;
+	while ( my $word = $words->next ) {
+		$heads->{$word->head} = 1;
+	}
 	while ( my $play = $standing->next ) {
 		$answers->{$play->word} = $play->answer if $play->answer;
 	}
+	$c->stash({ heads => $heads });
 	$c->stash({ answers => $answers });
 	$c->stash->{ template } = 'play.tt2';
 }

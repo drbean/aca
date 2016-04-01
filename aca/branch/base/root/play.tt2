@@ -25,8 +25,7 @@ There are 170 words in total, but you can write translations here for as many wo
 </TABLE>
 <TABLE>
 <TR><TD>Word:  <TD>Translation:
-[% WHILE (one = word.next) %]
-[% head = one.head %]
+[% FOREACH head IN heads.keys.sort %]
 <TR><TD>[% head %] <TD>
 [% IF dupes.$head %] <INPUT type="text" size=4 name="[% head %]" value="[% dupes.$head %]">
 [% ELSIF answers.$head %] [% answers.$head %]
