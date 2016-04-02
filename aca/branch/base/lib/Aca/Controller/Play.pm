@@ -53,7 +53,7 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 	$c->stash({limit => $limit});
 	$c->stash(course => $mycourse);
 	if ( $standing->count > $limit ) {
-		$c->detach("Delete", 'choose');
+		$c->detach("Delete", "delete");
 	}
 	$c->stash(word => $word);
 	$c->stash(standing => $standing);
