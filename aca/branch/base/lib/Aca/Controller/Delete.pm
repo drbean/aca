@@ -66,6 +66,7 @@ sub delete :Path :Args(0) {
 	$c->stash->{attempted}   = \%revised;
 	$c->stash->{words}  = $words;
 	$base->reset;
+	$c->stash->{template}	= "delete.tt2";
 }
 
 =encoding utf8
