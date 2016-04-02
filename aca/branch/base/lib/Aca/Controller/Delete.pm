@@ -31,7 +31,7 @@ sub index :Path :Args(0) {
 
 
 
-=head2 choose
+=head2 delete
 
 =cut
 
