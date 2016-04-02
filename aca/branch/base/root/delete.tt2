@@ -2,9 +2,11 @@
 
 <H1>Words for [% player %] in the vocabulary quiz for the [% exercise %] Exercise in the [% league %] league.</H1>
 
-<h2>You have attempted more words than the limit of [% limit %],</h2>
+<h2>You have attempted more words than the limit of [% limit %].</h2>
 
-<H2>Words attempted: [% pre_total %]/[% words.count %]</H2>
+<H2>Words attempted: [% pre_total %]/[% words.count %]. Delete [% pre_total - limit %] words.</H2>
+
+<br>Go back to <a href="[% c.uri_for('/play', exercise) %]">translate more words</a>.
 
 <FORM method="post" action="[% c.uri_for('/delete') %]">
 <INPUT type="hidden" name="course" value="[% course %]">
