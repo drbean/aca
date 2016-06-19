@@ -5,6 +5,7 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 use Net::FTP;
 use IO::All;
+use List::MoreUtils qw/any/;
 
 =head1 NAME
 
@@ -40,39 +41,43 @@ sub grade :Path :Args(0) {
 	my $id = $c->session->{player_id};
 	my $league   = $c->session->{league};
 	my $exercise = $c->session->{exercise};
-	my $words = $c->model("DB::Word")->search({
+	my $word_bank = $c->model("DB::Word")->search({
 		exercise =>  $exercise});
+	my @heads = $word_bank->get_column('head')->func('DISTINCT');
 	my $base = $c->model("DB::Play")->search({
 		league => $league, exercise => $exercise . "_base", player => $id });
-	my $word_total= $words->count;
+	my $word_total= @heads;
 	my $pre_total= $base->count;
-	$words->reset;
 	my $pre_correct = 0;
 	my (%answers, %wrong, %flash, %right, %passed);
-	while ( my $word = $words->next ) {
-		my $head = $word->head;
+	for my $head ( @heads ) {
 		next if $head eq 'shift';
+		next if $head eq 'first';
 		my $pre = $base->find({word => $head});
-		my $answer = $word->answer;
-		$answers{$head} = $answer;
+		my @answers;
+		my $words = $word_bank->search({ head => $head });
+		while ( my $word = $words->next ) {
+			push @answers, $word->answer;
+		}
+		$answers{$head} = join ', ', @answers;
 		if ( $pre_total == 0 ) {
 			$passed{$head} = "Unattempted";
-			$flash{$head} = $answer;
+			$flash{$head} = join ', ', @answers;
 		}
-		elsif ( $pre and $pre->answer eq $answer ) {
+		elsif ( $pre and any { $_ eq $pre->answer } @answers ) {
 			$pre_correct++;
 			$right{$head} = "Right";
 		}
 		elsif ( $pre ) {
 			$wrong{$head} = $pre->answer;
-			$flash{$head} = $answer;
+			$flash{$head} = join ', ', @answers;
 		}
 		else {
 			$passed{$head} = "Unattempted";
 		}
 
 	}
-	$words->reset;
+	$word_bank->reset;
 	my $pre_incorrect = $pre_total - $pre_correct;
 	my $unattempted = $word_total - $pre_total - 1;
 	$c->stash->{player}   = $id;
