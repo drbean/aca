@@ -58,18 +58,17 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 		if ( my $my_word = $base->find({ word => $head }) ) {
 			$my_answer = $my_word->answer;
 		}
-		my @answers;
+		my @the_answers;
 		my $words = $word_bank->search({ head => $head });
 		while ( my $word = $words->next ) {
-			push @answers, $word->answer;
+			push @the_answers, $word->answer;
 		}
 		$words->reset;
-		if ( $my_answer and none { $_ eq $my_answer } @answers ) {
+		if ( $my_answer and none { $_ eq $my_answer } @the_answers ) {
 			push @word, $head;
 		}
 	}
-	@word = $c->model("DB::Word")
-		->search({ exercise => $exercise }) unless @word;
+	@word = @heads unless @word;
 	if ( $standing->count >= scalar @word ) {
 		$c->stash(gameover => 1);
 		$c->detach('exchange');
@@ -96,6 +95,7 @@ sub try :Chained('setup') :PathPart('') :CaptureArgs(0) {
 		my $in_play = $c->request->params;
 		delete $in_play->{course};
 		delete $in_play->{shift};
+		delete $in_play->{first};
 		delete $in_play->{Submit};
 		$c->stash({ in_play => $in_play });
 		my @heads = keys %$in_play;
