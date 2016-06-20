@@ -1,12 +1,12 @@
 use utf8;
-package Aca::Schema::Result::Word;
+package Aca::Schema::Result::Alternative;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-Aca::Schema::Result::Word
+Aca::Schema::Result::Alternative
 
 =cut
 
@@ -80,6 +80,8 @@ __PACKAGE__->add_columns(
 =item * L</head>
 
 =item * L</exercise>
+
+=item * L</answer>
 
 =back
 
