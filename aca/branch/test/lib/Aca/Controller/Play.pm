@@ -2,8 +2,6 @@ package Aca::Controller::Play;
 use Moose;
 use namespace::autoclean;
 
-use List::MoreUtils qw/all/;
-
 BEGIN {extends 'Catalyst::Controller'; }
 
 =head1 NAME
@@ -18,7 +16,7 @@ Catalyst Controller.
 
 =cut
 
-use List::MoreUtils qw/any/;
+use List::MoreUtils qw/any none all/;
 
 #=head2 index
 #
@@ -47,19 +45,27 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 		->search({ player => $player,
 		exercise => $exercise,
 		league => $league });
-	my $words = $c->model("DB::Word")
+	my $word_bank = $c->model("DB::Word")
 		->search({ exercise => $exercise });
+	my @heads = $word_bank->get_column('head')->func('DISTINCT');
 	my $base = $c->model("DB::Play")->search({
 		league => $league, exercise => $exercise . "_base", player => $player });
 	my @word;
-	while ( my $word = $words->next ) {
-		my $head = $word->head;
+	for my $head ( @heads ) {
+		next if $head eq 'shift';
+		next if $head eq 'first';
 		my $my_answer;
 		if ( my $my_word = $base->find({ word => $head }) ) {
 			$my_answer = $my_word->answer;
 		}
-		if ( $my_answer and $my_answer ne $word->answer ) {
-			push @word, $word;
+		my @answers;
+		my $words = $word_bank->search({ head => $head });
+		while ( my $word = $words->next ) {
+			push @answers, $word->answer;
+		}
+		$words->reset;
+		if ( $my_answer and none { $_ eq $my_answer } @answers ) {
+			push @word, $head;
 		}
 	}
 	@word = $c->model("DB::Word")
