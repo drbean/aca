@@ -9,6 +9,7 @@ use Pod::Usage;
 use Config::General;
 use YAML qw/Bless Dump LoadFile/;
 use List::Util qw/reduce max/;
+use List::MoreUtils qw/all any/;
 use Moose::Autobox;
 use Aca::Model::DB;
 use Aca::Schema;
@@ -55,9 +56,10 @@ my $members = $league->members;
 my %members = map { $_->{id} => $_ } @$members;
 my ($report, $card);
 $report->{exercise} = $exercise;
-my $words = $schema->resultset("Word")->search({
+my $word_bank = $schema->resultset("Word")->search({
 		exercise => $exercise });
-my $wc = $words->count;
+my @heads = $word_bank->get_column('head')->func('DISTINCT');
+my $wc = @heads;
 my $answers = $schema->resultset("Play")->search({
 		league => $id });
 my $score_spread = 1;
@@ -74,23 +76,28 @@ for my $player ( keys %members ) {
 	if ( $standing and $standing != 0 ) {
 		my $post_total = $standing->count;
 		my $pre_total= $base->count;
-		$words->reset;
+		$word_bank->reset;
 		my ($pre_correct, $post_correct, $targeted, $improvement) = (0) x 4;
 		my $target_flag;
-		while ( my $word = $words->next ) {
-		    my $head = $word->head;
-		    next if $head eq 'shift' or $head eq 'course';
+		for my $head ( @heads ) {
+		    next if $head eq 'shift' or $head eq 'course' or $head eq 'first';
 		    my $pre = $base->find({word => $head});
 # $DB::single=1 unless $pre and $pre->answer;
-		    if ( $pre and $pre->answer eq $word->answer ) {
+			my @the_answers;
+			my $words = $word_bank->search({ head => $head });
+			while ( my $word = $words->next ) {
+				push @the_answers, $word->answer;
+			}
+			$words->reset;
+			if ( $pre and $pre->answer and all { $_ eq $pre->answer } @the_answers ) {
 				$pre_correct++;
 			}
-		    elsif ( $pre and $pre->answer ne $word->answer ) {
+		    elsif ( $pre and $pre->answer and any { $_ ne $pre->answer } @the_answers ) {
 				$targeted++;
 				$target_flag = 1;
 			}
 		    my $post = $standing->find({word => $head});
-		    if ( $post and $post->answer eq $word->answer ) {
+		    if ( $post and $post->answer and any { $_ eq $post->answer } @the_answers ) {
 				$post_correct++;
 				$improvement++ if $target_flag;
 			}
