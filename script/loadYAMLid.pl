@@ -76,7 +76,7 @@ for my $sublist_name ( @ids ) {
 	for my $word ( keys %$sublist ) {
 		push @vocab, [$exercise, $word, $sublist->{$word}, $sublist_name ]
 	}
-	uptodatepopulate("Word", \@vocab);
+	uptodatepopulate("Alternative", \@vocab);
 	warn "$sublist_name sublist missing" unless @vocab > 1;
 }
 
