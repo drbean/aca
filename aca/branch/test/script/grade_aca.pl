@@ -59,6 +59,8 @@ $report->{exercise} = $exercise;
 my $word_bank = $schema->resultset("Word")->search({
 		exercise => $exercise });
 my @heads = $word_bank->get_column('head')->func('DISTINCT');
+my $alternative = $schema->resultset("Alternative")->search({
+	exercise => $exercise});
 my $wc = @heads;
 my $answers = $schema->resultset("Play")->search({
 		league => $id });
@@ -83,21 +85,26 @@ for my $player ( keys %members ) {
 		    next if $head eq 'shift' or $head eq 'course' or $head eq 'first';
 		    my $pre = $base->find({word => $head});
 # $DB::single=1 unless $pre and $pre->answer;
-			my @the_answers;
+			my ( @the_answers, @alt_answers );
 			my $words = $word_bank->search({ head => $head });
 			while ( my $word = $words->next ) {
 				push @the_answers, $word->answer;
 			}
-			$words->reset;
+			my $alt = $alternative->search({ head => $head });
+			while ( my $word = $alt->next ) {
+				push @alt_answers, $word->answer;
+			}
+			$alternative->reset;
 			if ( $pre and $pre->answer and all { $_ eq $pre->answer } @the_answers ) {
 				$pre_correct++;
 			}
-		    elsif ( $pre and $pre->answer and any { $_ ne $pre->answer } @the_answers ) {
+		    elsif ( $pre and $pre->answer and all { $_ ne $pre->answer } @the_answers ) {
 				$targeted++;
 				$target_flag = 1;
 			}
 		    my $post = $standing->find({word => $head});
-		    if ( $post and $post->answer and any { $_ eq $post->answer } @the_answers ) {
+		    if ( $post and $post->answer and ( any { $_ eq $post->answer } @the_answers
+					or any { $_ eq $post->answer } @alt_answers ) ) {
 				$post_correct++;
 				$improvement++ if $target_flag;
 			}
