@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 04/20/2017 09:49:53 PM
-# Last Edit: 2017 Apr 21, 10:01:07 AM
+# Last Edit: 2017 May 01, 06:11:29 PM
 # $Id$
 
 =head1 NAME
@@ -76,7 +76,9 @@ my %m = map { $_->{id} => $_ } @{ $l->members };
 
 my ($gr, $bean_format) = LoadFile "/home/drbean/$ENV{SEMESTER}/$dir/exam/$round/g1.yaml";
 my ( %inc, %base_report, %test_report );
-for my $player ( keys %m ) {
+my @names = map { $m{$_}->{name} } keys %m;
+my %ids = map { $_ => $gr->{id}->{$_} } @names;
+for my $player ( values %ids ) {
     if ( defined $gr->{base}->{$player} and defined $gr->{test}->{$player} and
             $gr->{test}->{$player} > 0 ) {
         $inc{$player} = $gr->{test}->{$player} - $gr->{base}->{$player};
@@ -91,26 +93,30 @@ my $median = (sort {$a<=>$b} @valid_scores)[ @valid_scores/2 ];
 # my $median = (sort {$a<=>$b} values %inc)[ (keys %m)/2 ];
 my $max_points = max values %inc;
 my $check = sub {
-    my $player = shift();
+    my $name = shift();
+    my $id = $ids{$name};
     my $max_points = shift();
-    if ( defined $gr->{base}->{$player} ) {
-        if ( $gr->{raw_increase}->{$player} > $median ) {
-            $gr->{grade}->{$player} =  sprintf( "%.2f", 4 + 1 *
-                ($gr->{raw_increase}->{$player} - $median) /
+    if ( defined $gr->{base}->{$id} ) {
+        if ( $gr->{raw_increase}->{$id} > $median ) {
+            $gr->{grade}->{$name} =  sprintf( "%.2f", 4 + 1 *
+                ($gr->{raw_increase}->{$id} - $median) /
                     ($max_points - $median) );
         }
-        elsif ( $gr->{raw_increase}->{$player} <= $median ) {
-            $gr->{grade}->{$player} = sprintf( "%.2f", 3 + 1 *
-                $gr->{raw_increase}->{$player} / $median );
+        elsif ( $gr->{raw_increase}->{$id} <= $median ) {
+            $gr->{grade}->{$name} = sprintf( "%.2f", 3 + 1 *
+                $gr->{raw_increase}->{$id} / $median );
         }
         else {
-            die "No card.player, no report.grade.player?\n";
+            die "No card.id, no report.grade.id?\n";
         }
     }
 };
-$gr->{grade}->{$_} = $check->($_, $max_points) for keys %m;
+$gr->{grade}->{$_} = $check->($_, $max_points) for @names;
+my %numerical_grade = map { $_ => $gr->{grade}->{$m{$_}->{name}} } keys %m;
+
 
 print Dump $gr;
+print Dump \%numerical_grade;
 
 
 =head1 AUTHOR
