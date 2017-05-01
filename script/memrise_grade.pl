@@ -1,12 +1,12 @@
 #!/usr/bin/perl 
 
 # Created: 04/20/2017 09:49:53 PM
-# Last Edit: 2017 May 01, 06:11:29 PM
+# Last Edit: 2017 May 01, 06:14:30 PM
 # $Id$
 
 =head1 NAME
 
-memrise_grade.pl - competitive scoring 3~5 from memrise points
+memrise_grade.pl - competitive scoring 2~5 from memrise points
 
 =head1 VERSION
 
@@ -56,7 +56,7 @@ package main;
 
 =head1 DESCRIPTION
 
-The differences between test and base in $round/g1.yaml, curved so players with the least difference or with undefined base scores get 3, the player with biggest difference gets 5 and the player at the median point gets 4.
+The differences between test and base in $round/g1.yaml, curved so players with zero difference or with undefined base scores get 2, the player with biggest difference gets 5 and the player at the median point gets 4.
 
 =cut
 
@@ -103,7 +103,7 @@ my $check = sub {
                     ($max_points - $median) );
         }
         elsif ( $gr->{raw_increase}->{$id} <= $median ) {
-            $gr->{grade}->{$name} = sprintf( "%.2f", 3 + 1 *
+            $gr->{grade}->{$name} = sprintf( "%.2f", 2 + 2 *
                 $gr->{raw_increase}->{$id} / $median );
         }
         else {
