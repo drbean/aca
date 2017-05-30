@@ -22,7 +22,10 @@
 [% head = one.word %]
 <TR><TD>[% head %] <TD>
 [% IF answers.$head %] [% answers.$head %]
-[% ELSE %] <INPUT type="text" size=10 name="[% head %]" >
+[% ELSE %]
+	<INPUT type="radio" name="[% head %]" value="[% head %]">
+	<INPUT type="radio" name="[% head %]" value="[% head %]">
+	<INPUT type="radio" name="[% head %]" value="[% head %]">
 [% END %]
 [% END %]
 </TABLE>
