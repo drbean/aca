@@ -14,18 +14,15 @@
 <INPUT type="submit" name="Submit" value="Submit">
 <TABLE>
 <TR>
-<TD>[% progress %] <TD>translation(s) to go.
+<TD>[% progress %] <TD>translation(s) finished.
 </TABLE>
 <TABLE>
 <TR><TD>Word:  <TD>Translation:
-[% WHILE (one = standing.next) %]
-[% head = one.word %]
+[% FOREACH one IN word %]
+[% head = one.head %]
 <TR><TD>[% head %] <TD>
 [% IF answers.$head %] [% answers.$head %]
-[% ELSE %]
-	<INPUT type="radio" name="[% head %]" value="[% head %]">
-	<INPUT type="radio" name="[% head %]" value="[% head %]">
-	<INPUT type="radio" name="[% head %]" value="[% head %]">
+[% ELSE %] <INPUT type="text" size=4 name="[% head %]" >
 [% END %]
 [% END %]
 </TABLE>

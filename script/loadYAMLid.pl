@@ -6,17 +6,22 @@ loadYAMLid.pl -- Load a number of sublists from a YAML wordlist file
 
 =head1 SYNOPSIS
 
-loadYAMLid.pl data/wordlist.yaml -x sport -s fitness-theory,activities,weight-training
+loadYAMLid.pl data/wordlist.yaml fitness-theory activities weight-training
 
 =head1 DESCRIPTION
 
-Cut and paste from YAML into word table
+Cut and paste from YAML into texts, questions, percent tables 
+
+But be careful with targets.
 
 In order:
-  - exercise
-  - head
-  - answer
-  - sublist
+  - id
+  - description
+  - genre
+  - target
+  - content
+  - unclozeables
+  - percent # new
 
 
 =head1 AUTHOR
@@ -37,20 +42,6 @@ use lib 'lib';
 use Scalar::Util qw/looks_like_number/;
 use YAML qw/LoadFile DumpFile/;
 use IO::All;
-use Getopt::Long;
-use Pod::Usage;
-
-my $man = 0;
-my $help = 0;
-my $exercise = "";
-my @sublist = ();
-
-GetOptions ( 'help|?' => \$help, man => \$man
-	, "s=s@" => \@sublist
-	, "x=s" => \$exercise) or pod2usage(2);
-@sublist = split(/,/,join(',',@sublist));
-pod2usage(1) if $help;
-pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
 use Aca;
 use Aca::Schema;
@@ -63,7 +54,7 @@ my $w = $schema->resultset('Word');
 
 my $textfile = shift @ARGV;
 my $list = LoadFile $textfile;
-my @ids = @sublist;
+my @ids = @ARGV;
 for my $sublist_name ( @ids ) {
 	my @vocab;
 	my $field = $list->{field};
@@ -74,9 +65,9 @@ for my $sublist_name ( @ids ) {
 	my $sublist_field = 3;
 	my $sublist = $list->{$sublist_name};
 	for my $word ( keys %$sublist ) {
-		push @vocab, [$exercise, $word, $sublist->{$word}, $sublist_name ]
+		push @vocab, [ 'computing', $word, $sublist->{$word}, $sublist_name ]
 	}
-	uptodatepopulate("Alternative", \@vocab);
+	uptodatepopulate("Word", \@vocab);
 	warn "$sublist_name sublist missing" unless @vocab > 1;
 }
 
