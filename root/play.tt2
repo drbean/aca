@@ -2,30 +2,32 @@
 
 <H1>Welcome, [% player %], to the vocabulary quiz for the [% exercise %] Exercise in the [% league %] league.</H1>
 
-<p>We have used Anki or Mnemosyne to learn 180 words. The difference between the number of words which you got wrong on the pre-test and which you get right now will be your grade for Exam 2 of the course.
+<p>We are going to learn 100 words from <a href="http://developer.android.com">http://developer.android.com</a> about design principles for apps. And <a href="http://www.ehow.com/video_12250726_removing-apps-android-sdk-phone.html">tips for using your smartphone</a> This will be your grade for Exam 4 of the course. Your score will be the number of words which you get wrong in this pre-test but which you get right in the exam.
+
+There are 232 words in total, but you can write translations here for as many words as you like, up to a maximum of 100. The words in Exam 4 will be the words you get wrong here.
 
 <ul>
-<li>Give a translation for every word. Save your work regularly by clicking 'Submit' and certainly click 'Submit' before closing your browser.
-<li>Translations of some words are the same. Guessing is good, and they don't have to be different guesses for each word.
+<li>You don't have to give a translation for every word. Take a couple of days. But save your work regularly by clicking 'Submit' and certainly click 'Submit' before closing your browser.
+<li>Every translation must be different. Guessing is good, but they must be different guesses for each word.
+<li>When you think you have done enough words to give you a good number of words to study for the exam, you can check the Enough button for GAME OVER before clicking Submit.
 </ul>
 
 <FORM method="post" action="[% c.uri_for('/play', course) %]">
 <INPUT type="hidden" name="course" value="[% course %]">
 <INPUT type="submit" name="Submit" value="Submit">
+<P>
+<INPUT type="checkbox" name="quit" value="quit">ENOUGH: I have enough words
 <TABLE>
 <TR>
-<TD>[% progress %] <TD>translation(s) to go.
+<TD>[% progress %] <TD>translation(s) finished.
 </TABLE>
 <TABLE>
 <TR><TD>Word:  <TD>Translation:
-[% WHILE (one = standing.next) %]
-[% head = one.word %]
+[% FOREACH head IN heads.keys.sort %]
 <TR><TD>[% head %] <TD>
-[% IF answers.$head %] [% answers.$head %]
-[% ELSE %]
-	<INPUT type="radio" name="[% head %]" value="[% head %]">
-	<INPUT type="radio" name="[% head %]" value="[% head %]">
-	<INPUT type="radio" name="[% head %]" value="[% head %]">
+[% IF dupes.$head %] <INPUT type="text" size=4 name="[% head %]" value="[% dupes.$head %]">
+[% ELSIF answers.$head %] [% answers.$head %]
+[% ELSE %] <INPUT type="text" size=10 name="[% head %]" >
 [% END %]
 [% END %]
 </TABLE>

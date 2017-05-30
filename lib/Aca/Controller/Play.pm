@@ -34,7 +34,7 @@ use List::MoreUtils qw/any/;
 
 =head2 setup
 
-Gameover if all answers defined.
+Gameover if 100 answers defined.
 
 =cut
 
@@ -45,10 +45,18 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 	my $exercise = $c->session->{exercise};
 	my $standing = $c->model("DB::Play")
 		->search({ player => $player,
-		exercise => $exercise,
+		exercise => $exercise . "_base",
 		league => $league });
-	$c->stash(standing => $standing);
+	my $word = $c->model("DB::Word")
+		->search({ exercise => $exercise });
+	my $limit = $c->config->{limit};
+	$c->stash({limit => $limit});
 	$c->stash(course => $mycourse);
+	if ( $standing->count > $limit ) {
+		$c->detach("Delete", "delete");
+	}
+	$c->stash(word => $word);
+	$c->stash(standing => $standing);
 	$c->stash(player => $player);
 	$c->stash(exercise => $exercise);
 	$c->stash(league => $league);
@@ -69,11 +77,13 @@ sub try :Chained('setup') :PathPart('') :CaptureArgs(0) {
 		delete $in_play->{course};
 		delete $in_play->{shift};
 		delete $in_play->{Submit};
+		my $quit = delete $in_play->{quit};
 		$c->stash({ in_play => $in_play });
+		$c->stash({ quit => $quit });
 		my @heads = keys %$in_play;
 		my $tries = $c->model('DB::Try')->search({
 			league => $c->stash->{league},
-			exercise => $c->stash->{exercise},
+			exercise => $c->stash->{exercise} . "_base",
 			player => $c->stash->{player},
 			});
 		my $last_try = $tries->get_column('try')->max() + 1;
@@ -105,6 +115,7 @@ sub update :Chained('try') :PathPart('') :CaptureArgs(0) {
 	my $last_try = $c->stash->{last_try};
 	my $in_play = $c->stash->{in_play};
 	my $words = $c->stash->{word};
+	$words->reset;
 	my (%dupes, %values, %value_dupes, $error_msg);
 	for ( keys %$in_play ) {
 		my $value = $in_play->{$_};
@@ -126,11 +137,11 @@ sub update :Chained('try') :PathPart('') :CaptureArgs(0) {
 		for my $value ( keys %value_dupes ) {
 			my $keys = $value_dupes{$value};
 			my $first_word = shift @$keys;
-			#for my $dupe ( @$keys ) {
-			#	$error_msg .= "<br> You gave '$first_word' and '$dupe' the same \
-#translation, '$value'. Choose a different translation for one of them. </br> ";
-			#}
-			#$error_msg .= "<br/>";
+			for my $dupe ( @$keys ) {
+				$error_msg .= "<br> You gave '$first_word' and '$dupe' the same \
+translation, '$value'. Choose a different translation for one of them. </br> ";
+			}
+			$error_msg .= "<br/>";
 		}
 	}
 	for my $word ( %$in_play ) {
@@ -143,20 +154,21 @@ sub update :Chained('try') :PathPart('') :CaptureArgs(0) {
 			$dupes{ $word_in_standing } = $answer;
 			push @{ $value_dupes{$answer} }, $word;
 			push @{ $value_dupes{$answer} }, $word_in_standing;
-			# $error_msg .= "<br> Previously, you gave '$word_in_standing' the same \
-# translation as '$word', namely, '$answer'. Choose a different translation for one \
-# of them. </br> ";
+			$error_msg .= "<br> Previously, you gave '$word_in_standing' the same \
+translation as '$word', namely, '$answer'. Choose a different translation for one \
+of them. </br> ";
 		}
-		#if ( $value_dupes{$answer} ) {
-		#	$existing_words->delete unless $existing_words == 0;
-		#}
-		#else {
+		if ( $value_dupes{$answer} ) {
+			$existing_words->delete unless $existing_words == 0;
+		}
+		else {
 			$standing->update_or_create({ word => $word, answer => $answer,
 			try => $c->stash->{try} });
-		#}
+		}
 	}
-	my $progress = $standing->search({ answer => undef })->count;
+	my $progress = $standing->count;
 		$c->stash({ progress => $progress });
+		$words->reset;
 		$c->stash(dupes => \%dupes);
 		$c->stash({error_msg => $error_msg});
 		$c->stash({ word => $words });
@@ -170,17 +182,21 @@ GAME OVER, or loop back to REPL.
 
 sub exchange :Chained('update') :PathPart('') :Args(0) {
 	my ( $self, $c ) = @_;
-	if ( $c->stash->{gameover} ) {
+	if ( $c->stash->{gameover} or $c->stash->{quit} ) {
 		$c->detach("Report", 'grade');
+		return;
 	}
+	my $words = $c->stash->{word};
 	my $standing = $c->stash->{standing};
-	my $answers;
+	my ($heads, $answers);
 	$standing->reset;
+	while ( my $word = $words->next ) {
+		$heads->{$word->head} = 1;
+	}
 	while ( my $play = $standing->next ) {
 		$answers->{$play->word} = $play->answer if $play->answer;
 	}
-	$standing->reset;
-	$c->stash({ standing => $standing });
+	$c->stash({ heads => $heads });
 	$c->stash({ answers => $answers });
 	$c->stash->{ template } = 'play.tt2';
 }

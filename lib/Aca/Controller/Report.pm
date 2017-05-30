@@ -43,7 +43,7 @@ sub grade :Path :Args(0) {
 	my $words = $c->model("DB::Word")->search({
 		exercise =>  $exercise});
 	my $base = $c->model("DB::Play")->search({
-		league => $league, exercise => $exercise, player => $id });
+		league => $league, exercise => $exercise . "_base", player => $id });
 	my $word_total= $words->count;
 	my $pre_total= $base->count;
 	$words->reset;
@@ -56,11 +56,7 @@ sub grade :Path :Args(0) {
 		my $answer = $word->answer;
 		$answers{$head} = $answer;
 # $DB::single=1 if $head eq "vary";
-		if ( $pre_total == 0 ) {
-			$passed{$head} = "Unattempted";
-			$flash{$head} = $answer;
-		}
-		elsif ( $pre and $pre->answer eq $answer ) {
+		if ( $pre and $pre->answer eq $answer ) {
 			$pre_correct++;
 			$right{$head} = "Right";
 		}
@@ -106,7 +102,6 @@ sub ftp : Private {
     $ftp->login('greg', '');
     my $config = $c->config;
     my $leaguedirs = $config->{leagues};
-    my $league = $c->session->{league};
     my %leaguesByGenre;
     my @genres = qw/conversation business call esp tech friends customs media multimedia college literature       intercultural/;
     $leaguesByGenre{$_} = $config->{ $_ } for @genres;
@@ -115,7 +110,7 @@ sub ftp : Private {
     my $tourid = $c->stash->{league};
     my $genre = $leaguegenre{$tourid};
     $ftp->cwd("/public_html/tech/flash");
-    my $deck = "$leaguedirs/$league/flash/$id.txt";
+    my $deck = "$leaguedirs/FLA0021/flash/$id.txt";
     io($deck)->print
         ( $flash );
     $ftp->put($deck, "$id.txt");

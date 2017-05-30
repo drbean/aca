@@ -8,7 +8,7 @@ use parent 'Catalyst::Controller';
 
 =head1 NAME
 
-Aca::Controller::Login - Catalyst Controller
+Bett::Controller::Login - Catalyst Controller
 
 =head1 DESCRIPTION
 
@@ -38,9 +38,9 @@ sub index : Path : Args(0) {
 			if ( $c->check_user_roles($officialrole) ) {
 				$c->stash->{id}   = $id;
 				$c->stash->{name} = $name;
-				my @leagues = $c->model('DB::League')->search({});
+				my @leagues = $c->model('BettDB::League')->search({});
 				$c->stash->{leagues} = \@leagues;
-				my $jigsawroles = $c->model('DB::Jigsawrole');
+				my $jigsawroles = $c->model('BettDB::Jigsawrole');
 				my $oldrole = $jigsawroles->search( { player => $id } )->next;
 				if ($oldrole) {
 					$c->stash->{oldrole} = $oldrole->role;
@@ -116,7 +116,7 @@ sub official : Local {
 		if ( $c->check_user_roles($officialrole) ) {
 			$c->session->{exercise} = $exercise if $exercise;
 			$c->session->{league} = $league;
-			$c->model('DB::Jigsawrole')->update_or_create(
+			$c->model('BettDB::Jigsawrole')->update_or_create(
 				{ league => $league, player => $username, role => $jigsawrole } )
 					if defined $jigsawrole;
 			$c->response->redirect($c->uri_for("/play/setup"), 303);
