@@ -2,11 +2,11 @@
 
 <H1>Welcome, [% player %], to the vocabulary quiz for the [% exercise %] Exercise in the [% league %] league.</H1>
 
-<p>We have used Anki or Mnemosyne to learn 180 words. The difference between the number of words which you got wrong on the pre-test and which you get right now will be your grade for Exam 2 of the course.
+<p>We have used Anki or Memrise to learn [% word.size %] words. The difference between [% word.size %], that is, the number of words which you got wrong on the pre-test and which you get right now will be your grade for the exam in the "[% exercise %]" segment of the course.
 
 <ul>
 <li>Give a translation for every word. Save your work regularly by clicking 'Submit' and certainly click 'Submit' before closing your browser.
-<li>Translations of some words are the same. Guessing is good, and they don't have to be different guesses for each word.
+<li>Translations of some words may be the same. Guessing is good, and they don't have to be different guesses for each word.
 </ul>
 
 <FORM method="post" action="[% c.uri_for('/play', course) %]">
@@ -14,18 +14,14 @@
 <INPUT type="submit" name="Submit" value="Submit">
 <TABLE>
 <TR>
-<TD>[% progress %] <TD>translation(s) to go.
+<TD>[% progress %] <TD>translation(s) finished.
 </TABLE>
 <TABLE>
 <TR><TD>Word:  <TD>Translation:
-[% WHILE (one = standing.next) %]
-[% head = one.word %]
+[% FOREACH head IN word %]
 <TR><TD>[% head %] <TD>
 [% IF answers.$head %] [% answers.$head %]
-[% ELSE %]
-	<INPUT type="radio" name="[% head %]" value="[% head %]">
-	<INPUT type="radio" name="[% head %]" value="[% head %]">
-	<INPUT type="radio" name="[% head %]" value="[% head %]">
+[% ELSE %] <INPUT type="text" size=10 name="[% head %]" >
 [% END %]
 [% END %]
 </TABLE>

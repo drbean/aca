@@ -40,47 +40,7 @@
 [% END %]
 </TABLE>
 
-<h2>Now,</h2>
+<h2>As for grade,</h2>
 
 <br>
-Study all the words at <a href="http://www.memrise.com/course/292314/drbeans-140-computing-words-with-chinese-equivale/">Dr Bean's 140 computing words with Chinese equivalents</a> on the <a href="http://www.memrise.com">http://www.memrise.com</a> website. You may have to login, by creating an ID or using a Facebook ID.
-
-<h3>And/or</h3>
-
-<br>
-Download a personalized Anki <a href="http://web.nuu.edu.tw/~greg/tech/flash/[% player %].txt">flashcard deck with the words targeted for [% player %] in the exam</a>.
-</br>
-
-<br>
-Don't view the file. Download it.
-</br>
-
-
-<br>
-The download method for the file, named [% player %].txt, will depend on the browser.
-</br>
-
-<br>
-If you're using Internet Explorer, you can &lt;Right-Click&gt; the link,
-and <Left-Click> Save As ..
-
-Then choose somewhere to put it on your computer.
-
-</br>
-
-<br>
-On Firefox, view the file, then &lt;Right-click&gt; and click "Save as ..".
-</br>
-
-<br>
-On other browsers, it may be &lt;Alt-Left-click&gt; or &lt;Ctrl-Left-click&gt; or something. 
-</br>
-
-<br>
-Then, install the <a href="http://ankisrs.net">Anki</a> or <a href="http://mnemosyne-proj.org">Mnemosyne</a> flash card software.
-</br>
-
-<br>
-Create a new deck, [% exercise %], and import the file into the [% exercise %] deck.
-</br>
-
+Check <a href="http://web.nuu.edu.tw/~greg/[% league %]/Exam.html">http://web.nuu.edu.tw/~greg/[% league %]/Exam.html</a>

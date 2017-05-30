@@ -50,6 +50,7 @@ sub index : Path : Args(0) {
 				$c->stash->{template} = 'official.tt2';
 				return;
 			}
+$DB::single=1;
 			my @memberships =
 			  $c->model("DB::Member")->search( { player => $id } );
 			my @leagues;

@@ -2,8 +2,6 @@ package Aca::Controller::Play;
 use Moose;
 use namespace::autoclean;
 
-use List::MoreUtils qw/all/;
-
 BEGIN {extends 'Catalyst::Controller'; }
 
 =head1 NAME
@@ -18,7 +16,7 @@ Catalyst Controller.
 
 =cut
 
-use List::MoreUtils qw/any/;
+use List::MoreUtils qw/any none all/;
 
 #=head2 index
 #
@@ -47,6 +45,35 @@ sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
 		->search({ player => $player,
 		exercise => $exercise,
 		league => $league });
+	my $word_bank = $c->model("DB::Word")
+		->search({ exercise => $exercise });
+	my @heads = $word_bank->get_column('head')->func('DISTINCT');
+	my $base = $c->model("DB::Play")->search({
+		league => $league, exercise => $exercise . "_base", player => $player });
+	my @word;
+	for my $head ( @heads ) {
+		next if $head eq 'shift';
+		next if $head eq 'first';
+		my $my_answer;
+		if ( my $my_word = $base->find({ word => $head }) ) {
+			$my_answer = $my_word->answer;
+		}
+		my @the_answers;
+		my $words = $word_bank->search({ head => $head });
+		while ( my $word = $words->next ) {
+			push @the_answers, $word->answer;
+		}
+		$words->reset;
+		if ( $my_answer and none { $_ eq $my_answer } @the_answers ) {
+			push @word, $head;
+		}
+	}
+	@word = @heads unless @word;
+	if ( $standing->count >= scalar @word ) {
+		$c->stash(gameover => 1);
+		$c->detach('exchange');
+	}
+	$c->stash(word => \@word);
 	$c->stash(standing => $standing);
 	$c->stash(course => $mycourse);
 	$c->stash(player => $player);
@@ -68,6 +95,7 @@ sub try :Chained('setup') :PathPart('') :CaptureArgs(0) {
 		my $in_play = $c->request->params;
 		delete $in_play->{course};
 		delete $in_play->{shift};
+		delete $in_play->{first};
 		delete $in_play->{Submit};
 		$c->stash({ in_play => $in_play });
 		my @heads = keys %$in_play;
@@ -106,6 +134,7 @@ sub update :Chained('try') :PathPart('') :CaptureArgs(0) {
 	my $in_play = $c->stash->{in_play};
 	my $words = $c->stash->{word};
 	my (%dupes, %values, %value_dupes, $error_msg);
+	$error_msg = $c->stash->{error_msg};
 	for ( keys %$in_play ) {
 		my $value = $in_play->{$_};
 		$values{$value}++ if $value;
@@ -155,7 +184,7 @@ sub update :Chained('try') :PathPart('') :CaptureArgs(0) {
 			try => $c->stash->{try} });
 		#}
 	}
-	my $progress = $standing->search({ answer => undef })->count;
+	my $progress = $standing->count;
 		$c->stash({ progress => $progress });
 		$c->stash(dupes => \%dupes);
 		$c->stash({error_msg => $error_msg});
@@ -179,8 +208,6 @@ sub exchange :Chained('update') :PathPart('') :Args(0) {
 	while ( my $play = $standing->next ) {
 		$answers->{$play->word} = $play->answer if $play->answer;
 	}
-	$standing->reset;
-	$c->stash({ standing => $standing });
 	$c->stash({ answers => $answers });
 	$c->stash->{ template } = 'play.tt2';
 }
