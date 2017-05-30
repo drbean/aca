@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 04/20/2017 09:49:53 PM
-# Last Edit: 2017 May 01, 06:14:30 PM
+# Last Edit: 2017 May 16, 10:35:38 AM
 # $Id$
 
 =head1 NAME
@@ -56,7 +56,7 @@ package main;
 
 =head1 DESCRIPTION
 
-The differences between test and base in $round/g1.yaml, curved so players with zero difference or with undefined base scores get 2, the player with biggest difference gets 5 and the player at the median point gets 4.
+The differences between test and base in $round/g1.yaml, curved so players with zero difference or with undefined base scores get 0, the player with biggest difference gets 5 and the player at the median point gets 4.
 
 =cut
 
@@ -103,7 +103,7 @@ my $check = sub {
                     ($max_points - $median) );
         }
         elsif ( $gr->{raw_increase}->{$id} <= $median ) {
-            $gr->{grade}->{$name} = sprintf( "%.2f", 2 + 2 *
+            $gr->{grade}->{$name} = sprintf( "%.2f", 0 + 4 *
                 $gr->{raw_increase}->{$id} / $median );
         }
         else {
