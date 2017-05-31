@@ -19,7 +19,7 @@ my $schema = Aca::Schema->connect( $connect_info );
 
 my $leaguegenres = [
 			[ qw/league genre/ ],
-			[ "FLA0021",	9],
+			[ "FLA0010",	9],
 		];
 
 my @leagueids = map $_->[0], @$leaguegenres[1..$#$leaguegenres];
@@ -34,8 +34,6 @@ for my $league ( @leagueids ) {
 					@{$leaguefile->{member}};
 }
 
-uptodatepopulate( 'League', $leagues );
-
 uptodatepopulate( 'Genre', [
 			[ qw/id value/ ],
 			[ 1, "conversation" ],
@@ -48,6 +46,8 @@ uptodatepopulate( 'Genre', [
 			[ 8, "call" ],
 			[ 9, "tech" ],
 			] );
+
+uptodatepopulate( 'League', $leagues );
 
 uptodatepopulate( 'Leaguegenre', $leaguegenres );
 
