@@ -27,12 +27,16 @@ There are 232 words in total, but you can write translations here for as many wo
 
 [% definition = heads.values %]
 [% FOREACH head IN heads.keys.sort %]
-[% distractors = [ definition.random, heads.$head, definition.random ] %]
 
 <TR><TD>[% head %] <TD>
-[% IF dupes.$head %] <INPUT type="text" size=4 name="[% head %]" value="[% dupes.$head %]">
+[% IF dupes.$head %]
+	[% distractors = [ definition.random, dupes.$head, definition.random ] %]
+	[% FOREACH distractor IN distractors.shuffle %]
+	<INPUT type="radio" name="[% head %]" value="[% distractor %]"> [% distractor %]<br>
+	[% END %]
 [% ELSIF answers.$head %] [% answers.$head %]
 [% ELSE %]
+	[% distractors = [ definition.random, heads.$head, definition.random ] %]
 	[% FOREACH distractor IN distractors.shuffle %]
 	<INPUT type="radio" name="[% head %]" value="[% distractor %]"> [% distractor %]<br>
 	[% END %]
