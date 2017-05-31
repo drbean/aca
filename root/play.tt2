@@ -28,9 +28,9 @@ There are 232 words in total, but you can write translations here for as many wo
 [% IF dupes.$head %] <INPUT type="text" size=4 name="[% head %]" value="[% dupes.$head %]">
 [% ELSIF answers.$head %] [% answers.$head %]
 [% ELSE %]
-	<INPUT type="radio" name="[% head %]" value="[% head %]">
-	<INPUT type="radio" name="[% head %]" value="[% head %]">
-	<INPUT type="radio" name="[% head %]" value="[% head %]">
+	<INPUT type="radio" name="[% head %]" value="[% heads.$head %]"> [% heads.$head %]<br>
+	<INPUT type="radio" name="[% head %]" value="[% heads.$head %]"> [% heads.$head %]<br>
+	<INPUT type="radio" name="[% head %]" value="[% heads.$head %]"> [% heads.$head %]<br>
 [% END %]
 [% END %]
 </TABLE>
