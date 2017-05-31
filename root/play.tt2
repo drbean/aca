@@ -18,11 +18,11 @@ There are 160 words in total, but you can write translations here for as many wo
 <INPUT type="submit" name="Submit" value="Submit">
 <P>
 <INPUT type="checkbox" name="quit" value="quit">ENOUGH: I have enough words
-<TABLE border="1">
+<TABLE>
 <TR>
 <TD>[% progress %] <TD>translation(s) finished.
 </TABLE>
-<TABLE>
+<TABLE border="1">
 <TR><TD>Word:  <TD>Translation:
 
 [% definition = heads.values %]
