@@ -191,7 +191,7 @@ sub exchange :Chained('update') :PathPart('') :Args(0) {
 	my ($heads, $answers);
 	$standing->reset;
 	while ( my $word = $words->next ) {
-		$heads->{$word->head} = 1;
+		$heads->{$word->head} = $word->answer;
 	}
 	while ( my $play = $standing->next ) {
 		$answers->{$play->word} = $play->answer if $play->answer;
