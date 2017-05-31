@@ -32,6 +32,7 @@ There are 232 words in total, but you can write translations here for as many wo
 	<INPUT type="radio" name="[% head %]" value="[% heads.$head %]"> [% heads.$head %]<br>
 	<INPUT type="radio" name="[% head %]" value="[% heads.$head %]"> [% heads.$head %]<br>
 [% END %]
+<br>
 [% END %]
 </TABLE>
 <INPUT type="submit" name="Submit" value="Submit">
