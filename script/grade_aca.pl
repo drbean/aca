@@ -42,7 +42,7 @@ my $schema = Aca::Schema->connect( $connect_info );
 my $script = Script->new_with_options;
 my $id = $script->league;
 my $exercise = $script->exercise;
-my $base = $script->base or $exercise . "_base";
+my $base = $script->base ? $script->base : $exercise . "_base";
 my $man = $script->man;
 my $help = $script->help;
 
@@ -57,15 +57,18 @@ my %members = map { $_->{id} => $_ } @$members;
 my ($report, $card);
 $report->{exercise} = $exercise;
 my $word_bank = $schema->resultset("Word")->search({
-		exercise => $exercise });
+		exercise => 'academic' });
 my @heads = $word_bank->get_column('head')->func('DISTINCT');
-my $alternative = $schema->resultset("Alternative")->search({
-	exercise => $exercise});
 my $wc = @heads;
 my $answers = $schema->resultset("Play")->search({
 		league => $id });
 my $score_spread = 1;
 my $participants = 0;
+for my $player ( keys %members ) {
+	@{$report->{points}->{$player}->{pre_test}}{qw/attempted correct/} = [0] x 2;
+	@{$report->{points}->{$player}->{post_test}}{qw/attempted correct targeted improvement/} = [0] x 4;
+	$report->{grade}->{$player} = 0;
+}
 my $class_total = { pre_test => { attempted => 0, correct => 0 }
 			, post_test => {
 				attempted => 0, correct => 0, targeted => 0, improvement => 0 }
@@ -84,31 +87,22 @@ for my $player ( keys %members ) {
 		for my $head ( @heads ) {
 		    next if $head eq 'shift' or $head eq 'course' or $head eq 'first';
 		    my $pre = $base->find({word => $head});
-# $DB::single=1 unless $pre and $pre->answer;
 			my ( @the_answers, @alt_answers );
 			my $words = $word_bank->search({ head => $head });
 			while ( my $word = $words->next ) {
 				push @the_answers, $word->answer;
 			}
-			my $alt = $alternative->search({ head => $head });
-			while ( my $word = $alt->next ) {
-				push @alt_answers, $word->answer;
-			}
-			$alternative->reset;
 			if ( $pre and $pre->answer and all { $_ eq $pre->answer } @the_answers ) {
 				$pre_correct++;
 			}
 		    elsif ( $pre and $pre->answer and all { $_ ne $pre->answer } @the_answers ) {
 				$targeted++;
-				$target_flag = 1;
 			}
 		    my $post = $standing->find({word => $head});
 		    if ( $post and $post->answer and ( any { $_ eq $post->answer } @the_answers
-					or any { $_ eq $post->answer } @alt_answers ) ) {
+					 ) ) {
 				$post_correct++;
-				$improvement++ if $target_flag;
 			}
-			$target_flag = 0;
 		}
 		$report->{points}->{$player}->{pre_test}->{attempted} = $pre_total;
 		$report->{points}->{$player}->{pre_test}->{correct} = $pre_correct;
@@ -122,8 +116,8 @@ for my $player ( keys %members ) {
 		$class_total->{post_test}->{correct} += $post_correct;
 		$class_total->{post_test}->{targeted} += $targeted;
 		$class_total->{post_test}->{improvement} +=$improvement;
-		$card->{$player} = $improvement;
-		$participants++ if $targeted;
+		$card->{$player} = $post_correct;
+		$participants++;
 	}
 	else {
 		$report->{points}->{$player}->{pre_test}->{attempted} = 0;
@@ -148,7 +142,7 @@ for my $player ( keys %members ) {
 			$report->{grade}->{$player} =  sprintf( "%.2f", 4 + 1 * ($card->{$player} - $median) / ($max_points - $median) );
 		}
 		elsif ( $card->{$player} <= $median ) {
-			$report->{grade}->{$player} = sprintf( "%.2f", 3 + 1 * $card->{$player} / $median );
+			$report->{grade}->{$player} = sprintf( "%.2f", 0 + 4 * $card->{$player} / $median );
 		}
 		else {
 			die "No card.player, no report.grade.player?\n";
